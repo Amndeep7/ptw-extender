@@ -6,6 +6,6 @@ My problem is that I'd keep finding gifs or pics of anime that'd make me want to
 
 ![The Problem](the_problem.png "The Problem")
 
-Having gotten tired of this, I decided to make an add-on that would automate the process sufficiently enough that it'd be easy to go through that process, resulting in sourced shows and manga being added to my plan-to-watch list (where they'd stay and rot forever).  
+Having gotten tired of this, I decided to make an add-on that would automate the process sufficiently enough that it'd be easy to go through that process, resulting in sourced shows and manga being added to my plan-to-watch list (where they'll stay and rot forever).  
 
 ![The Solution](the_solution.gif "The Solution")
