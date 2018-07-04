@@ -18,10 +18,10 @@ browser.menus.create({
 			console.log("Match success");
 			console.log(`${type} ${id}`);
 			const generatedurl = {
-				"anime": [`https://myanimelist.net/panel.php?go=add&selected_series_id=${id}`,
-					`https://myanimelist.net/editlist.php?type=anime&id=${id}`],
-				"manga": [`https://myanimelist.net/panel.php?go=addmanga&selected_manga_id=${id}`,
-					`https://myanimelist.net/panel.php?go=editmanga&id=${id}`],
+				"anime": [`https://myanimelist.net/ownlist/anime/add?selected_series_id=${id}`,
+					`https://myanimelist.net/ownlist/anime/${id}/edit`],
+				"manga": [`https://myanimelist.net/ownlist/manga/add?selected_manga_id=${id}`,
+					`https://myanimelist.net/ownlist/manga/${id}/edit`],
 			};
 			const maxattempts = 2;
 			const trytabs = (a) => {

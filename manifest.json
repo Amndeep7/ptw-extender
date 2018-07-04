@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "MAL PTW Extender",
-  "version": "1.0",
+  "version": "1.1",
 
   "description": "Adds shows to your MAL's ptw list with the url of where you found the source added as a comment",
   "icons": {
