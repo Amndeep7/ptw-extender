@@ -5,3 +5,8 @@
 # node/npm spam
 node_modules
 package-lock.json
+
+# firefox addon stuff
+web-ext-artifacts
+solution screenshot.png
+solution screenshot 2.png
