@@ -1,17 +1,20 @@
 {
   "manifest_version": 2,
   "name": "MAL PTW Extender",
-  "version": "1.1",
+  "version": "1.2",
 
   "description": "Adds shows to your MAL's ptw list with the url of where you found the source added as a comment",
   "icons": {
+    "16": "icons/icon.svg",
+    "32": "icons/icon.svg",
     "48": "icons/icon.svg",
-    "96": "icons/icon.svg"
+    "96": "icons/icon.svg",
+    "128": "icons/icon.svg"
   },
 
   "permissions": [
     "https://myanimelist.net/*",
-    "menus",
+    "contextMenus",
     "tabs"
   ],
 

@@ -1,12 +1,8 @@
 /* eslint no-console: "off" */
-browser.menus.create({
+chrome.contextMenus.create({
 	"id": "ptw",
 	"title": "Add to MAL PTW list",
 	"contexts": ["link"],
-	"icons": {
-		"16": "icons/icon.svg",
-		"32": "icons/icon.svg",
-	},
 	"onclick": (info, tab) => {
 		console.log("hello");
 		console.log(`Link URL: ${info.linkUrl}`);
