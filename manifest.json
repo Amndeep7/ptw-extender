@@ -21,6 +21,7 @@
   ],
 
   "background": {
-    "scripts": ["menu.js"]
+    "scripts": ["menu.js"],
+	"persistent": false
   }
 }
