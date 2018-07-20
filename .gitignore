@@ -1,10 +1,9 @@
-# vim spam
+# spam
 .*.un~
 .tern-project
-
-# node/npm spam
 node_modules
 package-lock.json
+npm-debug.log 
 
 # firefox addon stuff
 web-ext-artifacts
