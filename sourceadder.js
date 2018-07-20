@@ -4,7 +4,10 @@ browser.runtime.onMessage.addListener((message, sender, _sendResponse) => {
 	console.log(`${message}`);
 	console.log(`${sender.id}\n${browser.runtime.id}`);
 	if (sender.id === browser.runtime.id) {
-		const comments = document.querySelector("textarea.inputtext");
+		const advanced = document.querySelector(".advanced");
+		advanced.style = "";
+		console.log("displaying advanced section");
+		const comments = document.querySelector("#add_anime_comments");
 		console.log(`${comments.value.length}`);
 		console.log(`${comments.value.length === 0}`);
 		if (comments.value.length === 0) {
@@ -15,7 +18,7 @@ browser.runtime.onMessage.addListener((message, sender, _sendResponse) => {
 			comments.value += `${"\n"}${message.taburl}`;
 		}
 		console.log("text added");
-		const status = Array.from(document.querySelectorAll("select.inputtext"))[1];
+		const status = document.querySelector("#add_anime_status");
 		console.log(status);
 		console.log(status.id);
 		console.log(status.value);
