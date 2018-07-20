@@ -10,3 +10,6 @@ package-lock.json
 web-ext-artifacts
 solution screenshot.png
 solution screenshot 2.png
+
+# build artifacts
+icons/icon_*.png
