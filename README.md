@@ -1,7 +1,7 @@
 ![PTW-Extender Icon](icons/icon.svg "PTW-Extender Icon")
 # ptw-extender
 
-Firefox add-on to make adding titles to one's MAL plan-to-watch list easier by automatically taking you to the edit details page for that title when given an appropriate URL where it sets the status as "plan-to-watch" and puts the URL of the tab you were on into the comments box so that you can refer back to why you added it to the list in the first place.
+Firefox and Chrome add-on to make adding titles to one's MAL plan-to-watch list easier by automatically taking you to the edit details page for that title when given an appropriate URL where it sets the status as "plan-to-watch" and puts the URL of the tab you were on into the comments box so that you can refer back to why you added it to the list in the first place.  NOTE: You need to already be logged into MAL in order for this add-on to work since, as of the writing of this README, there is no way to access and modify a user's data without the add-on storing your MAL credentials, which I do not want to do.
 
 My problem is that I'd keep finding gifs or pics of anime that'd make me want to add them to my ptw list; however, I'd either put it on there without putting up a source, which would eventually result in me wondering why that show was on there in the first place, or I would just save the source without going to the bother of adding it to the list. 
 
