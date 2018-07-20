@@ -1,5 +1,8 @@
 /* eslint no-console: "off" */
-chrome.contextMenus.create({
+
+window.browser = (() => window.msBrowser || window.browser || window.chrome)();
+
+browser.contextMenus.create({
 	"id": "ptw",
 	"title": "Add to MAL PTW list",
 	"contexts": ["link"],
