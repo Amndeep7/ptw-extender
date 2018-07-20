@@ -5,6 +5,6 @@
 
 echo "Creating pngs from svg"
 
-for size in 16 32 48 64 96 128; do
+for size in 16 25 32 48 64 96 128; do
 	inkscape icons/icon.svg -e icons/icon_"$size".png -w "$size" -h "$size"
 done
