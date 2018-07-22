@@ -1,7 +1,7 @@
 {
   "name": "ptw-extender",
   "version": "1.2.0",
-  "description": "Firefox add-on to make adding titles to one's MAL plan-to-watch list easier",
+  "description": "Extension that adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
   "repository": {
     "type": "git",
     "url": "https://github.com/Amndeep7/ptw-extender.git"
