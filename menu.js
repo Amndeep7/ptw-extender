@@ -1,14 +1,14 @@
 /* eslint no-console: "off" */
-browser.menus.create({
+
+menu_id = browser.contextMenus.create({
 	"id": "ptw",
 	"title": "Add to MAL PTW list",
-	"contexts": ["link"],
-	"icons": {
-		"16": "icons/icon.svg",
-		"32": "icons/icon.svg",
-	},
-	"onclick": (info, tab) => {
-		console.log("hello");
+	"contexts": ["link"]
+});
+
+browser.contextMenus.onClicked.addListener((info, tab) => {
+	console.log("hello");
+	if (info.menuItemId === menu_id) {
 		console.log(`Link URL: ${info.linkUrl}`);
 		console.log(`Tab URL: ${tab.url}`);
 		const match = info.linkUrl.match(/^https?:\/\/myanimelist\.net\/(anime|manga)\/(\d+).*$/);
@@ -40,13 +40,12 @@ browser.menus.create({
 							correctChange = true;
 							if (changeInfo.url === generatedurl[type][a]) {
 								console.log("success");
-								const scriptpromise = browser.tabs.executeScript({
-									"file": "sourceadder.js",
-								});
-								scriptpromise.then((_result) => {
+								browser.tabs.executeScript({ "file": "lib/browser-polyfill.js" });
+								browser.tabs.executeScript({ "file": "sourceadder.js" }).then((_result) => {
 									console.log("sending message");
 									browser.tabs.sendMessage(maltab.id, {
 										"taburl": tab.url,
+										"type": type
 									});
 								}, (err) => {
 									console.log(`failed running script due to err: ${err}`);
@@ -76,5 +75,5 @@ browser.menus.create({
 			console.log("Match fail");
 		}
 		console.log("world");
-	},
+	}
 });

@@ -1,10 +1,14 @@
 /* eslint no-console: off */
+
 browser.runtime.onMessage.addListener((message, sender, _sendResponse) => {
 	console.log("in content script");
 	console.log(`${message}`);
 	console.log(`${sender.id}\n${browser.runtime.id}`);
 	if (sender.id === browser.runtime.id) {
-		const comments = document.querySelector("textarea.inputtext");
+		const advanced = document.querySelector(".advanced");
+		advanced.style = "";
+		console.log("displaying advanced section");
+		const comments = document.querySelector(`#add_${message.type}_comments`);
 		console.log(`${comments.value.length}`);
 		console.log(`${comments.value.length === 0}`);
 		if (comments.value.length === 0) {
@@ -15,7 +19,7 @@ browser.runtime.onMessage.addListener((message, sender, _sendResponse) => {
 			comments.value += `${"\n"}${message.taburl}`;
 		}
 		console.log("text added");
-		const status = Array.from(document.querySelectorAll("select.inputtext"))[1];
+		const status = document.querySelector(`#add_${message.type}_status`);
 		console.log(status);
 		console.log(status.id);
 		console.log(status.value);

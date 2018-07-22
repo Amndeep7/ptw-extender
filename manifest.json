@@ -1,21 +1,30 @@
 {
   "manifest_version": 2,
-  "name": "MAL PTW Extender",
-  "version": "1.1",
+  "author": "Amndeep Singh Mann",
+  "name": "PTW Extender",
+  "version": "1.2.0",
+  "description": "Adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
 
-  "description": "Adds shows to your MAL's ptw list with the url of where you found the source added as a comment",
   "icons": {
-    "48": "icons/icon.svg",
-    "96": "icons/icon.svg"
+    "16": "icons/icon_16.png",
+    "32": "icons/icon_32.png",
+    "48": "icons/icon_48.png",
+    "64": "icons/icon_64.png",
+    "96": "icons/icon_96.png",
+    "128": "icons/icon_128.png"
   },
 
   "permissions": [
     "https://myanimelist.net/*",
-    "menus",
+    "contextMenus",
     "tabs"
   ],
 
   "background": {
-    "scripts": ["menu.js"]
+    "scripts": [
+      "lib/browser-polyfill.js",
+      "menu.js"
+    ],
+    "persistent": false
   }
 }

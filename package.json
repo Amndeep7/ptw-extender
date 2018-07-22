@@ -1,22 +1,24 @@
 {
   "name": "ptw-extender",
-  "version": "1.0.0",
-  "description": "Firefox add-on to make adding titles to one's MAL plan-to-watch list easier",
+  "version": "1.2.0",
+  "description": "Extension that adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Amndeep7/ptw-extender.git"
+  },
+  "author": "Amndeep Singh Mann",
+  "license": "MIT",
   "main": "menu.js",
   "scripts": {
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "MIT",
   "devDependencies": {
     "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.13.0"
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "webextension-polyfill": "^0.3.0"
   },
   "dependencies": {
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-jsx-a11y": "^6.1.0",
-    "eslint-plugin-react": "^7.10.0"
   }
 }
