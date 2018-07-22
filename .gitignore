@@ -7,8 +7,6 @@ npm-debug.log
 
 # firefox addon stuff
 web-ext-artifacts
-solution screenshot.png
-solution screenshot 2.png
 
 # build artifacts
 icons/icon_*.png
