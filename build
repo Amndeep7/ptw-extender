@@ -11,7 +11,7 @@ done
 echo "Running npm install to get dependencies"
 npm install
 
-# don't wanna needlessly distribute the polyfill code 
+# don't wanna duplicate the polyfill library in this repo, so gotta move it from the node area to someplace accessible
 echo "Copying polyfill library into /lib"
 mkdir lib/
 cp node_modules/webextension-polyfill/dist/browser-polyfill.js lib/
