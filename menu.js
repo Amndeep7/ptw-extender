@@ -1,7 +1,5 @@
 /* eslint no-console: "off" */
 
-window.browser = (() => window.msBrowser || window.browser || window.chrome)();
-
 browser.contextMenus.create({
 	"id": "ptw",
 	"title": "Add to MAL PTW list",
@@ -39,10 +37,8 @@ browser.contextMenus.create({
 							correctChange = true;
 							if (changeInfo.url === generatedurl[type][a]) {
 								console.log("success");
-								const scriptpromise = browser.tabs.executeScript({
-									"file": "sourceadder.js",
-								});
-								scriptpromise.then((_result) => {
+								browser.tabs.executeScript({ "file": "lib/browser-polyfill.js" });
+								browser.tabs.executeScript({ "file": "sourceadder.js" }).then((_result) => {
 									console.log("sending message");
 									browser.tabs.sendMessage(maltab.id, {
 										"taburl": tab.url,

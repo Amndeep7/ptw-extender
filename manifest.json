@@ -21,7 +21,10 @@
   ],
 
   "background": {
-    "scripts": ["menu.js"],
-	"persistent": false
+    "scripts": [
+      "lib/browser-polyfill.js",
+      "menu.js"
+    ],
+    "persistent": false
   }
 }

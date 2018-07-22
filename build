@@ -2,9 +2,16 @@
 
 # can't just use an svg cause, unlike Firefox, Chrome has had a bug since 2009 where extension icons don't recognize svgs
 # source: https://bugs.chromium.org/p/chromium/issues/detail?id=29683
-
 echo "Creating pngs from svg"
-
 for size in 16 25 32 48 64 96 128; do
 	inkscape icons/icon.svg -e icons/icon_"$size".png -w "$size" -h "$size"
 done
+
+# install dependencies - might need to run the build script in sudo cause for me at least WSL makes things weird
+echo "Running npm install to get dependencies"
+npm install
+
+# don't wanna needlessly distribute the polyfill code 
+echo "Copying polyfill library into /lib"
+mkdir lib/
+cp node_modules/webextension-polyfill/dist/browser-polyfill.js lib/

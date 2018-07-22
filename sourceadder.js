@@ -1,4 +1,5 @@
 /* eslint no-console: off */
+
 browser.runtime.onMessage.addListener((message, sender, _sendResponse) => {
 	console.log("in content script");
 	console.log(`${message}`);
