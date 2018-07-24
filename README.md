@@ -2,6 +2,13 @@
 
 # PTW Extender
 
+| Add-on/Extension Repository/Store |
+| --- |
+| [Firefox](https://addons.mozilla.org/en-US/firefox/addon/ptw-extender/) |
+| [Chrome](https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh)
+
+---
+
 An extension that makes adding titles to one's MyAnimeList's plan-to-watch list easier by automatically taking you to the edit details page for that title when given an appropriate URL where it sets the status as "plan-to-watch" and puts the URL of the tab you were on into the comments box so that you can refer back to why you added it to the list in the first place.  NOTE: You need to already be logged into MAL in order for this extension to work since, as of the writing of this README, there is no way to access and modify a user's data without the add-on storing your MAL credentials, which I do not want to do.
 
 ## Why?
