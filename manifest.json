@@ -23,6 +23,7 @@
   "background": {
     "scripts": [
       "lib/browser-polyfill.js",
+      "mal/mal.js",
       "menu.js"
     ],
     "persistent": false
