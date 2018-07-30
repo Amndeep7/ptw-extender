@@ -30,3 +30,5 @@ Having gotten tired of this, I decided to make an extension that would automate 
 
 ### Build process
 Run `build` to install dependencies locally, move over libraries, and generate the icons.
+
+Run the respective utility from each browser to generate the actual extension package that gets uploaded though you're gonna wanna go over the resultant package to make sure that files that shouldn't be in there are removed.
