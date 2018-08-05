@@ -27,19 +27,20 @@ const handleMAL = (tab, urlData) => {
 	let scriptRun = null;
 
 	const promisedTabHandlerGenerator = (urlVariation) => (malTab) => {
+		console.log("in handler generator");
 		console.log(`${tab.url}`);
 		console.log(`${urlVariation}`);
 
-		const handleCreatedTab = (tabId, changeInfo) => {
+		const handleCreatedTab = async (tabId, changeInfo) => {
 			if (tabId === malTab.id) {
 				if (changeInfo.url) {
-					const removeTab = () => {
-						const removepromise = browser.tabs.remove(malTab.id);
-						removepromise.then(() => {
+					const removeTab = async () => {
+						try {
+							await browser.tabs.remove(malTab.id);
 							console.log("Tab closed");
-						}, (e) => {
-							console.log(`Error in closing tab: ${e}`);
-						});
+						} catch (e) {
+							console.log("Error in closing tab:", e);
+						}
 					};
 
 					if (changeInfo.url === urlVariation) {
@@ -47,8 +48,11 @@ const handleMAL = (tab, urlData) => {
 						browser.tabs.onUpdated.removeListener(handleCreatedTab);
 						urlChanged = true;
 
-						browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
-						browser.tabs.executeScript(tabId, { "file": "./mal/sourceadder.js" }).then(async () => {
+						try {
+							console.log("running polyfill");
+							await browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
+							console.log("running sourceadder");
+							await browser.tabs.executeScript(tabId, { "file": "./mal/sourceadder.js" });
 							console.log("sending message");
 							scriptRun = await browser.tabs.sendMessage(malTab.id, {
 								"taburl": tab.url,
@@ -58,10 +62,10 @@ const handleMAL = (tab, urlData) => {
 							if (!scriptRun) {
 								removeTab();
 							}
-						}, (err) => {
-							console.log("failed running script due to err: ", err);
+						} catch (e) {
+							console.log("failed running script due to err: ", e);
 							removeTab();
-						});
+						}
 					} else {
 						console.log("Tab unsuccessfully created");
 						browser.tabs.onUpdated.removeListener(handleCreatedTab);
@@ -78,7 +82,9 @@ const handleMAL = (tab, urlData) => {
 		browser.tabs.onUpdated.addListener(handleCreatedTab);
 	};
 
-	const waitingOnURLChangeResult = () => new Promise((resolve, reject) => {
+	const waitingOnURLChangeResult = (timeout) => new Promise((resolve, reject) => {
+		let timeOut = timeout;
+		const refreshRate = 50;
 		(function waiting() {
 			if (urlChanged === true) {
 				if (scriptRun === true) {
@@ -93,19 +99,28 @@ const handleMAL = (tab, urlData) => {
 				urlChanged = null;
 				return reject();
 			}
-			return setTimeout(waiting, 50);
+			timeOut -= refreshRate;
+			if (timeOut < 0) {
+				urlChanged = null;
+				scriptRun = null;
+				return reject(new Error("timeout"));
+			}
+			return setTimeout(waiting, refreshRate);
 		}());
 	});
 
-	const createMALTab = (variation, catchFunc) => () => {
-		browser.tabs.create({ "index": tab.index + 1, "url": variation })
-			.then(promisedTabHandlerGenerator(variation))
-			.then(async () => {
-				console.log("waiting");
-				const waits = await waitingOnURLChangeResult();
-				return waits;
-			})
-			.catch(catchFunc);
+	const createMALTab = (variation, catchFunc) => async () => {
+		try {
+			console.log("creating tab");
+			const maltab = await browser.tabs.create({ "index": tab.index + 1, "url": variation });
+			console.log("making tab handler");
+			promisedTabHandlerGenerator(variation)(maltab);
+			console.log("waiting");
+			await waitingOnURLChangeResult(10000);
+		} catch (e) {
+			console.log("Creating MAL tab", variation, "failed due to err:", e);
+			catchFunc();
+		}
 	};
 
 	createMALTab(generatedURL.add,
