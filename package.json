@@ -1,6 +1,6 @@
 {
   "name": "ptw-extender",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Extension that adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
   "repository": {
     "type": "git",
