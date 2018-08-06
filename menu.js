@@ -1,9 +1,9 @@
 /* eslint no-console: "off" */
 
-let menuId = null;
+let menuId = "ptw";
 browser.runtime.onInstalled.addListener(() => {
 	menuId = browser.contextMenus.create({
-		"id": "ptw",
+		"id": menuId,
 		"title": "Add to MAL PTW list",
 		"contexts": ["link"],
 	});
