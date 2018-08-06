@@ -17,6 +17,7 @@
   "permissions": [
     "https://myanimelist.net/*",
     "contextMenus",
+    "notifications",
     "tabs"
   ],
 

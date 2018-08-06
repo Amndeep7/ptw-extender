@@ -117,12 +117,16 @@ const handleMAL = (tab, urlData) => {
 			promisedTabHandlerGenerator(variation)(maltab);
 			console.log("waiting");
 			await waitingOnURLChangeResult(10000);
+			return { "title": "Success", "message": "Added title to your MAL PTW list" };
 		} catch (e) {
 			console.log("Creating MAL tab", variation, "failed due to err:", e);
-			catchFunc();
+			return catchFunc();
 		}
 	};
 
-	createMALTab(generatedURL.add,
-		createMALTab(generatedURL.edit, () => { console.log("Probably need to log into MAL"); }))();
+	return createMALTab(generatedURL.add,
+		createMALTab(generatedURL.edit, () => {
+			console.log("Probably need to log into MAL");
+			return { "title": "Failure", "message": "Failed to add title to your MAL PTW list - are you logged in?" };
+		}))();
 };

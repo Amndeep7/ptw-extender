@@ -21,7 +21,16 @@ const validateAndMineURL = (url) => {
 	return false;
 };
 
-browser.contextMenus.onClicked.addListener((info, tab) => {
+const createNotification = (notification) => {
+	browser.notifications.create({
+		"type": "basic",
+		"iconUrl": browser.extension.getURL("./icons/icon_48.png"),
+		"title": notification.title,
+		"message": notification.message,
+	});
+};
+
+browser.contextMenus.onClicked.addListener(async (info, tab) => {
 	console.log("hello");
 	if (info.menuItemId === menuId) {
 		console.log(`Link URL: ${info.linkUrl}`);
@@ -29,7 +38,7 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
 		const urlData = validateAndMineURL(info.linkUrl);
 		if (urlData.source === Sites.mal) {
 			// eslint-disable-next-line no-undef
-			handleMAL(tab, urlData);
+			createNotification(await handleMAL(tab, urlData));
 		} else {
 			console.log("Match fail");
 		}
