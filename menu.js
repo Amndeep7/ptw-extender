@@ -1,76 +1,44 @@
 /* eslint no-console: "off" */
 
-menu_id = browser.contextMenus.create({
-	"id": "ptw",
-	"title": "Add to MAL PTW list",
-	"contexts": ["link"]
+let menuId = null;
+browser.runtime.onInstalled.addListener(() => {
+	menuId = browser.contextMenus.create({
+		"id": "ptw",
+		"title": "Add to MAL PTW list",
+		"contexts": ["link"],
+	});
 });
 
-browser.contextMenus.onClicked.addListener((info, tab) => {
+const Sites = Object.freeze({ "mal": Symbol("mal") });
+
+const validateAndMineURL = (url) => {
+	// eslint-disable-next-line no-undef
+	const matchMAL = matchOnMAL(url);
+	if (matchMAL) {
+		matchMAL.source = Sites.mal;
+		return matchMAL;
+	}
+	return false;
+};
+
+const createNotification = (notification) => {
+	browser.notifications.create({
+		"type": "basic",
+		"iconUrl": browser.extension.getURL("./icons/icon_48.png"),
+		"title": notification.title,
+		"message": notification.message,
+	});
+};
+
+browser.contextMenus.onClicked.addListener(async (info, tab) => {
 	console.log("hello");
-	if (info.menuItemId === menu_id) {
+	if (info.menuItemId === menuId) {
 		console.log(`Link URL: ${info.linkUrl}`);
 		console.log(`Tab URL: ${tab.url}`);
-		const match = info.linkUrl.match(/^https?:\/\/myanimelist\.net\/(anime|manga)\/(\d+).*$/);
-		if (match) {
-			const type = match[1];
-			const id = match[2];
-			console.log("Match success");
-			console.log(`${type} ${id}`);
-			const generatedurl = {
-				"anime": [`https://myanimelist.net/ownlist/anime/add?selected_series_id=${id}`,
-					`https://myanimelist.net/ownlist/anime/${id}/edit`],
-				"manga": [`https://myanimelist.net/ownlist/manga/add?selected_manga_id=${id}`,
-					`https://myanimelist.net/ownlist/manga/${id}/edit`],
-			};
-			const maxattempts = 2;
-			const trytabs = (a) => {
-				if (a >= maxattempts) {
-					console.log("Probably need to log into MAL");
-					return;
-				}
-				console.log(`${a}`);
-				const malpromise = browser.tabs.create({ "index": tab.index + 1, "url": generatedurl[type][a] });
-				malpromise.then((maltab) => {
-					console.log(`${maltab.url}`);
-					console.log(`${generatedurl[type][a]}`);
-					let correctChange = false;
-					browser.tabs.onUpdated.addListener((tabId, changeInfo, _tabInfo) => {
-						if (tabId === maltab.id && !correctChange && changeInfo.url) {
-							correctChange = true;
-							if (changeInfo.url === generatedurl[type][a]) {
-								console.log("success");
-								browser.tabs.executeScript({ "file": "lib/browser-polyfill.js" });
-								browser.tabs.executeScript({ "file": "sourceadder.js" }).then((_result) => {
-									console.log("sending message");
-									browser.tabs.sendMessage(maltab.id, {
-										"taburl": tab.url,
-										"type": type
-									});
-								}, (err) => {
-									console.log(`failed running script due to err: ${err}`);
-								});
-							} else {
-								console.log("failure");
-								const removepromise = browser.tabs.remove(maltab.id);
-								removepromise.then(() => {
-									console.log("Tab closed");
-									trytabs(a + 1);
-								}, (e) => {
-									console.log(`Error in closing tab: ${e}`);
-								});
-							}
-						} else if (correctChange) {
-							console.log("changes are irrelevant now");
-						} else {
-							console.log("tab url hasn't changed yet");
-						}
-					});
-				}, (error) => {
-					console.log(`Error in #${a + 1} tab: ${error}`);
-				});
-			};
-			trytabs(0);
+		const urlData = validateAndMineURL(info.linkUrl);
+		if (urlData.source === Sites.mal) {
+			// eslint-disable-next-line no-undef
+			createNotification(await handleMAL(tab, urlData));
 		} else {
 			console.log("Match fail");
 		}
