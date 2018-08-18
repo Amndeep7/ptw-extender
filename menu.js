@@ -1,12 +1,17 @@
 /* eslint no-console: "off" */
 
-let menuId = "ptw";
-browser.runtime.onInstalled.addListener(() => {
-	menuId = browser.contextMenus.create({
+const menuId = "ptw";
+console.log("removing context menus");
+const remove = browser.contextMenus.removeAll();
+remove.then(() => {
+	console.log("creating context menu");
+	browser.contextMenus.create({
 		"id": menuId,
 		"title": "Add to MAL PTW list",
 		"contexts": ["link"],
 	});
+}).catch((e) => {
+	console.log("error while deleting context menus", e);
 });
 
 const Sites = Object.freeze({ "mal": Symbol("mal") });
