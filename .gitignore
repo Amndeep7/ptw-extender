@@ -11,3 +11,6 @@ web-ext-artifacts
 # build artifacts
 icons/icon_*.png
 lib/
+
+# "production" artifacts - screenshots and modified icons to fit browser promotion requirements
+pictures/*.png
