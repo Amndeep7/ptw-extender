@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>PTW Extender Options Page</title>
+	<link rel="stylesheet" href="options.css">
 </head>
 <body>
 	<h1>PTW Extender Options Page</h1>
-	<div class="mal">
-		<h3>MAL specific options:</h3>
-		<label>
-			<input type="checkbox" data-option-source="mal" name="autosubmit">
-			Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
-		</label>
-	</div>
+	<form>
+		<fieldset class="mal">
+			<legend>MAL specific options:</legend>
+			<label>
+				<input type="checkbox" data-option-source="mal" name="autosubmit">
+				Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
+			</label>
+		</fieldset>
+	</form>
 	<div class="results_area">
 		<h4>The last action:</h4>
 		<p id="results">Nothing was changed</p>
