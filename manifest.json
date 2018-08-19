@@ -5,6 +5,12 @@
   "version": "2.1.0",
   "description": "Adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
 
+  "applications": {
+    "gecko": {
+      "id": "{c4d3fb11-c300-4eed-a904-144fba03fb61}"
+    }
+  },
+
   "icons": {
     "16": "icons/icon_16.png",
     "32": "icons/icon_32.png",
@@ -18,6 +24,7 @@
     "https://myanimelist.net/*",
     "contextMenus",
     "notifications",
+    "storage",
     "tabs"
   ],
 
@@ -28,5 +35,10 @@
       "menu.js"
     ],
     "persistent": false
+  }, 
+
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
   }
 }
