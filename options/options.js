@@ -45,6 +45,10 @@ const restoreOptions = async (type, defaults, restoreOption) => {
 };
 
 const checkboxOptionsDefaults = {
+	"extension": {
+		"displaynotifications": true,
+		"prettifycommentsbox": true,
+	},
 	"mal": {
 		"autosubmit": false,
 	},
