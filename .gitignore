@@ -1,5 +1,6 @@
 # spam
 .*.un~
+.*.swp
 .tern-project
 node_modules
 package-lock.json
