@@ -14,18 +14,22 @@ browser.contextMenus.removeAll().then(() => {
 	throw e;
 });
 
+let optionsWithVersioning = {};
+const optionsVersion = "v1";
 let options = {};
 browser.storage.sync.get().then((o) => {
-	options = o;
+	optionsWithVersioning = o;
+	options = optionsWithVersioning[optionsVersion];
 }).catch((e) => {
 	console.log("error while getting options", e);
 	throw e;
 });
 browser.storage.onChanged.addListener((changes, _areaName) => {
-	console.log("option was changed");
+	console.log("option was changed", changes);
 	Object.entries(changes).forEach((change) => {
-		options[change[0]] = change[1].newValue;
+		optionsWithVersioning[change[0]] = change[1].newValue;
 	});
+	options = optionsWithVersioning[optionsVersion];
 });
 
 const Sites = Object.freeze({ "mal": Symbol("MyAnimeList") });

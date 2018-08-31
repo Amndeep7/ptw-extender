@@ -1,16 +1,20 @@
 /* eslint no-console: "off" */
 
-// names have to be unique, but I wanna allow the possibility of the same name for different option sources
-// so instead of being able to use an html data attribute or something, I gotta stick the source in the name
+// - names have to be unique - can't use a custom data attribute to divide between elements with the same name so
+// that's why the options have prefixes
+// - versioning has been added, but not any transitioning between versions so that's a TODO whenever I make a new
+// version of the options
 const optionsDefaults = {
-	"checkbox": {
-		"extension_displayNotifications": true,
-		"extension_prettifyCommentsBox": true,
-		"mal_mal": true,
-		"mal_autosubmit": false,
-	},
-	"radio": {
-		"mal_behaviorPostAutosubmit": "titlePage",
+	"v1": {
+		"checkbox": {
+			"extension_displayNotifications": true,
+			"extension_prettifyCommentsBox": true,
+			"mal_mal": true,
+			"mal_autosubmit": false,
+		},
+		"radio": {
+			"mal_behaviorPostAutosubmit": "titlePage",
+		},
 	},
 };
 
@@ -44,10 +48,10 @@ const saveOption = async (option, type) => {
 		// every time a change is desired, change the the contents accordingly, and then push the contents back up.
 		// wasteful, but it helps maintain organization and it's not like there's lots of options nor will a user be
 		// constantly changing them so i'm fine with it
-		const options = await browser.storage.sync.get(type.type);
-		options[type.type][option.target.name] = option.target[type.property];
+		const options = await browser.storage.sync.get(type.version);
+		options[type.version][type.type][option.target.name] = option.target[type.property];
 		await browser.storage.sync.set({
-			[type.type]: options[type.type],
+			[type.version]: options[type.version],
 		});
 
 		document.querySelector("#results").innerHTML = `${option.target.name}`
@@ -58,17 +62,17 @@ const saveOption = async (option, type) => {
 	}
 };
 
-const setupSavingCheckboxOptions = () => {
+const setupSavingCheckboxOptions = (optionsVersion) => {
 	document.querySelectorAll("input[type=checkbox]")
 		.forEach((option) => option.addEventListener("change", (o) => {
-			saveOption(o, { "type": "checkbox", "property": "checked" });
+			saveOption(o, { "version": optionsVersion, "type": "checkbox", "property": "checked" });
 		}));
 };
 
-const setupSavingRadioOptions = () => {
+const setupSavingRadioOptions = (optionsVersion) => {
 	document.querySelectorAll("input[type=radio]")
 		.forEach((option) => option.addEventListener("change", (o) => {
-			saveOption(o, { "type": "radio", "property": "value" });
+			saveOption(o, { "version": optionsVersion, "type": "radio", "property": "value" });
 		}));
 };
 
@@ -76,10 +80,8 @@ const setupDisablingDependentOptions = () => {
 	// dependent class and associated attributes should only be applied to wrapping divs
 	document.querySelectorAll(".dependent")
 		.forEach((dependency) => {
-			console.log("dependency", dependency);
 			// might need to come back to add more tags other than input
 			dependency.querySelectorAll("input").forEach((input) => {
-				console.log("input", input);
 				const value = ((v) => {
 					// https://stackoverflow.com/a/23752239/645647 - example on how to use empty + custom data attributes
 					// undefined means attribute not there, "" means attribute there using empty attribute syntax or
@@ -100,9 +102,7 @@ const setupDisablingDependentOptions = () => {
 					input.dependencies = {};
 				}
 				const option = document.querySelector(`input[name="${dependency.dataset.dependentOn}"]`);
-				console.log("option", option);
 				const update = (o) => {
-					console.log(input, o, input.dependencies);
 					// eslint-disable-next-line no-param-reassign
 					input.dependencies[dependency.dataset.dependentOn] = o[dependency.dataset.dependentProperty]
 						=== value;
@@ -111,7 +111,6 @@ const setupDisablingDependentOptions = () => {
 				};
 				update(option);
 				option.addEventListener("change", (o) => {
-					console.log("o", o);
 					update(o.target);
 				});
 			});
@@ -130,11 +129,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 		throw e;
 	}
 
-	restoreOptions(options, "checkbox", restoreCheckboxOption);
-	restoreOptions(options, "radio", restoreRadioOption);
+	const optionsVersion = "v1";
 
-	setupSavingCheckboxOptions();
-	setupSavingRadioOptions();
+	restoreOptions(options[optionsVersion], "checkbox", restoreCheckboxOption);
+	restoreOptions(options[optionsVersion], "radio", restoreRadioOption);
+
+	setupSavingCheckboxOptions(optionsVersion);
+	setupSavingRadioOptions(optionsVersion);
 
 	setupDisablingDependentOptions();
 });
