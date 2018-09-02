@@ -82,7 +82,8 @@ browser.contextMenus.removeAll().then(() => {
 				}, options.checkbox.extension_displayNotifications);
 			} else if (urlData && urlData.source === Sites.mal) {
 				// eslint-disable-next-line no-undef
-				createNotification(await handleMAL(tab, urlData));
+				createNotification(await handleMAL(tab, urlData,
+					{ "prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox }));
 			} else {
 				console.log("Match fail");
 				createNotification({

@@ -51,6 +51,20 @@ browser.runtime.onMessage.addListener((message, sender) => {
 					return Promise.resolve(false);
 				}
 			}
+
+			if (message.options.prettifyCommentsBox) {
+				// eslint-disable-next-line no-undef
+				const linkifiedComments = linkifyHtml(`<div id="linkified_comments" class="inputtext"><p>${
+					comments.value.split("\n").join(" <br /> ")}</p></div>`);
+				comments.insertAdjacentHTML("beforebegin", linkifiedComments);
+				comments.addEventListener("input", () => {
+					// eslint-disable-next-line no-undef
+					document.querySelector("#linkified_comments p").innerHTML = linkifyHtml(comments.value.split("\n")
+						.join(" <br /> "));
+				});
+				console.log("created prettified comment area");
+			}
+
 			return Promise.resolve(true);
 		}
 	}

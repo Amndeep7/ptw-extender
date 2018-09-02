@@ -16,7 +16,7 @@ const matchOnMAL = (url) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const handleMAL = (tab, urlData) => {
+const handleMAL = (tab, urlData, options) => {
 	const generatedURL = {
 		"add": `https://myanimelist.net/ownlist/${urlData.type}/add`
 		+ `?selected_${urlData.type === "anime" ? "series" : "manga"}_id=${urlData.id}`,
@@ -51,12 +51,16 @@ const handleMAL = (tab, urlData) => {
 						try {
 							console.log("running polyfill");
 							await browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
+							console.log("running linkify");
+							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify.js" });
+							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify-html.js" });
 							console.log("running sourceadder");
 							await browser.tabs.executeScript(tabId, { "file": "./mal/sourceadder.js" });
 							console.log("sending message");
 							scriptRun = await browser.tabs.sendMessage(malTab.id, {
 								"taburl": tab.url,
 								"type": urlData.type,
+								"options": { "prettifyCommentsBox": options.prettifyCommentsBox },
 							});
 							console.log("scriptRun val", scriptRun);
 							if (!scriptRun) {

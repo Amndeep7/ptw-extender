@@ -15,3 +15,5 @@ npm install
 echo "Copying libraries into /lib"
 mkdir -p lib/
 cp node_modules/webextension-polyfill/dist/browser-polyfill.js lib/
+cp node_modules/linkifyjs/dist/linkify.js lib/
+cp node_modules/linkifyjs/dist/linkify-html.js lib/
