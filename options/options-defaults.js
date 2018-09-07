@@ -19,6 +19,7 @@ const optionsDefaults = {
 };
 
 (async () => {
+	console.log("options being set");
 	// make sure the defaults are assigned, but don't override any changed settings
 	let options = null;
 	try {
