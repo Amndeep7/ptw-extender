@@ -81,7 +81,7 @@ browser.contextMenus.removeAll()
 					createNotification({
 						"title": "Ignoring list site",
 						"message": `PTW Extender is currently set to ignore ${urlData.source.toString().slice(7, -1)}`,
-					}, options.checkbox.extension_displayNotifications);
+					});
 				} else if (urlData && urlData.source === Sites.mal) {
 					// eslint-disable-next-line no-undef
 					createNotification(await handleMAL(tab, urlData,
