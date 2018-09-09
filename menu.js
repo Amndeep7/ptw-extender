@@ -84,8 +84,11 @@ browser.contextMenus.removeAll()
 					});
 				} else if (urlData && urlData.source === Sites.mal) {
 					// eslint-disable-next-line no-undef
-					createNotification(await handleMAL(tab, urlData,
-						{ "prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox }));
+					createNotification(await handleMAL(tab, urlData, {
+						"prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox,
+						"autosubmit": options.checkbox.mal_autosubmit,
+						"behaviorPostAutosubmit": options.radio.mal_behaviorPostAutosubmit,
+					}));
 				} else {
 					console.log("Match fail");
 					createNotification({

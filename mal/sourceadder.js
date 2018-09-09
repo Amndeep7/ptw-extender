@@ -1,10 +1,10 @@
 /* eslint no-console: off */
 
 browser.runtime.onMessage.addListener((message, sender) => {
-	console.log("in content script");
+	console.log("in sourceadder script");
 	console.log(`${message}`);
 	console.log(`${sender.id}\n${browser.runtime.id}`);
-	if (sender.id === browser.runtime.id) {
+	if (sender.id === browser.runtime.id && message.id && message.id === "sourceadder") {
 		if (document.querySelector("#myanimelist")) {
 			const advanced = document.querySelector(".advanced");
 			advanced.style = "";

@@ -51,20 +51,66 @@ const handleMAL = (tab, urlData, options) => {
 						try {
 							console.log("running polyfill");
 							await browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
+
 							console.log("running linkify");
 							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify.js" });
 							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify-html.js" });
+
 							console.log("running sourceadder");
 							await browser.tabs.executeScript(tabId, { "file": "./mal/sourceadder.js" });
+
 							console.log("sending message");
 							scriptRun = await browser.tabs.sendMessage(malTab.id, {
+								"id": "sourceadder",
 								"taburl": tab.url,
 								"type": urlData.type,
 								"options": { "prettifyCommentsBox": options.prettifyCommentsBox },
 							});
+
 							console.log("scriptRun val", scriptRun);
 							if (!scriptRun) {
 								removeTab();
+							} else if (options.autosubmit) {
+								console.log("auto press submit");
+								const buttonPress = () => {
+									const bp = async (details) => {
+										if (details.tabId === tabId && details.frameId === 0) {
+											console.log("running listener");
+											browser.webNavigation.onCompleted.removeListener(bp);
+
+											switch (options.behaviorPostAutosubmit) {
+											case "closeTab":
+												removeTab();
+												break;
+											case "viewList":
+											case "titlePage": {
+												console.log("sending message for second press");
+												await browser.tabs.executeScript(tabId,
+													{ "file": "./lib/browser-polyfill.js" });
+												await browser.tabs.executeScript(tabId, { "file": "./mal/buttons.js" });
+												await browser.tabs.sendMessage(tabId, {
+													"id": "buttons",
+													"submitButton": false,
+													"options": {
+														"behaviorPostAutosubmit": options.behaviorPostAutosubmit,
+													},
+												});
+												break;
+											}
+											default:
+												break;
+											}
+										}
+									};
+									return bp;
+								};
+								browser.webNavigation.onCompleted.addListener(buttonPress());
+
+								await browser.tabs.executeScript(tabId, { "file": "./mal/buttons.js" });
+								await browser.tabs.sendMessage(tabId, {
+									"id": "buttons",
+									"submitButton": true,
+								});
 							}
 						} catch (e) {
 							console.log("failed running script due to err: ", e);

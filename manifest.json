@@ -25,7 +25,8 @@
     "contextMenus",
     "notifications",
     "storage",
-    "tabs"
+    "tabs",
+    "webNavigation"
   ],
 
   "background": {
