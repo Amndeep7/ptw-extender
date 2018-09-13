@@ -14,14 +14,11 @@ browser.runtime.onMessage.addListener((message, sender) => {
 			console.log("displaying advanced section");
 
 			const comments = document.querySelector(`#add_${message.type}_comments`);
-			console.log(`${comments.value.length}`);
-			console.log(`${comments.value.length === 0}`);
+			const comment = `${new Date().toLocaleString()} -> ${message.taburl}`;
 			if (comments.value.length === 0) {
-				console.log(`${""}${message.taburl}`);
-				comments.value += `${""}${message.taburl}`;
+				comments.value += `${""}${comment}`;
 			} else {
-				console.log(`${"\n"}${message.taburl}`);
-				comments.value += `${"\n"}${message.taburl}`;
+				comments.value += `${"\n"}${comment}`;
 			}
 			console.log("text added");
 
