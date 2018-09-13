@@ -6,8 +6,11 @@ browser.runtime.onMessage.addListener((message, sender) => {
 	console.log(`${sender.id}\n${browser.runtime.id}`);
 	if (sender.id === browser.runtime.id && message.id && message.id === "sourceadder") {
 		if (document.querySelector("#myanimelist")) {
-			const advanced = document.querySelector(".advanced");
-			advanced.style = "";
+			const showAdvancedButton = document.querySelector("#show-advanced-button");
+			if (showAdvancedButton.style.length === 0) {
+				const advanced = document.querySelector("#advanced-button");
+				advanced.click();
+			}
 			console.log("displaying advanced section");
 
 			const comments = document.querySelector(`#add_${message.type}_comments`);
