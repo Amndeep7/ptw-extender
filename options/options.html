@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PTW Extender Options Page</title>
+	<link rel="stylesheet" href="options.css">
+</head>
+<body>
+	<h1>PTW Extender Options Page</h1>
+	<form>
+		<fieldset class="extension">
+			<legend>Extension specific options:</legend>
+			<label>
+				<input type="checkbox" name="extension_displayNotifications">
+				Display notifications to display success/failure of actions by the extension
+			</label>
+			<label>
+				<input type="checkbox" name="extension_prettifyCommentsBox">
+				Add an alternate view for the comments box so it's easy to click links
+			</label>
+		</fieldset>
+		<fieldset class="mal">
+			<legend>MAL specific options:</legend>
+			<label>
+				<input type="checkbox" name="mal_mal">
+				Use MAL as a list site option
+			</label>
+			<div class="dependent" data-dependent-on="mal_mal" data-dependent-property="checked">
+				<label>
+					<input type="checkbox" name="mal_autosubmit">
+					Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
+				</label>
+				<div class="dependent radioButtonGrouping" data-dependent-on="mal_autosubmit" data-dependent-property="checked">
+					<label>Action to take after hitting submit:</label>
+					<label>
+						<input type="radio" name="mal_behaviorPostAutosubmit" value="nothing">
+						Do nothing
+					</label>
+					<label>
+						<input type="radio" name="mal_behaviorPostAutosubmit" value="viewList">
+						View your list
+					</label>
+					<label>
+						<input type="radio" name="mal_behaviorPostAutosubmit" value="titlePage">
+						View the title's page
+					</label>
+					<label>
+						<input type="radio" name="mal_behaviorPostAutosubmit" value="closeTab">
+						Close the tab
+					</label>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+	<div class="results_area">
+		<h4>The last action:</h4>
+		<p id="results">Nothing was changed</p>
+	</div>
+
+	<script type="application/javascript" src="../lib/browser-polyfill.js"></script>
+	<script type="application/javascript" src="options-defaults.js"></script>
+	<script type="application/javascript" src="options.js"></script>
+</body>
+</html>

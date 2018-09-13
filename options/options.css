@@ -1,0 +1,8 @@
+label {
+	display: block;
+}
+
+/* This could get funky with multiple nested divs that are one right after the other */
+.dependent {
+	margin-left: 5%;
+}

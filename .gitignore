@@ -1,5 +1,6 @@
 # spam
 .*.un~
+.*.swp
 .tern-project
 node_modules
 package-lock.json
@@ -11,3 +12,7 @@ web-ext-artifacts
 # build artifacts
 icons/icon_*.png
 lib/
+
+# "production" artifacts - screenshots and modified icons to fit browser promotion requirements
+pictures/*.png
+pictures/*.gif

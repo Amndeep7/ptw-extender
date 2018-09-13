@@ -1,6 +1,6 @@
 {
   "name": "ptw-extender",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Extension that adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
   "repository": {
     "type": "git",
@@ -16,9 +16,10 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "webextension-polyfill": "^0.3.0"
+    "eslint-plugin-import": "^2.13.0"
   },
   "dependencies": {
+    "linkifyjs": "^2.1.6",
+    "webextension-polyfill": "^0.3.0"
   }
 }

@@ -11,7 +11,9 @@ done
 echo "Running npm install to get dependencies"
 npm install
 
-# don't wanna duplicate the polyfill library in this repo, so gotta move it from the node area to someplace accessible
-echo "Copying polyfill library into /lib"
+# don't wanna duplicate libraries in this repo (and haven't figured out how to use proper build/packaging tools yet), so gotta move it from the node area to someplace accessible
+echo "Copying libraries into /lib"
 mkdir -p lib/
 cp node_modules/webextension-polyfill/dist/browser-polyfill.js lib/
+cp node_modules/linkifyjs/dist/linkify.js lib/
+cp node_modules/linkifyjs/dist/linkify-html.js lib/
