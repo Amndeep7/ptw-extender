@@ -54,7 +54,7 @@ const handleMAL = (tab, urlData, options) => {
 
 							console.log("running linkify");
 							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify.js" });
-							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify-html.js" });
+							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify-element.js" });
 
 							console.log("running sourceadder");
 							await browser.tabs.executeScript(tabId, { "file": "./mal/sourceadder.js" });

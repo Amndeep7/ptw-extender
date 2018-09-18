@@ -53,14 +53,30 @@ browser.runtime.onMessage.addListener((message, sender) => {
 			}
 
 			if (message.options.prettifyCommentsBox) {
-				// eslint-disable-next-line no-undef
-				const linkifiedComments = linkifyHtml(`<div id="linkified_comments" class="inputtext"><p>${
-					comments.value.split("\n").join(" <br /> ")}</p></div>`);
-				comments.insertAdjacentHTML("beforebegin", linkifiedComments);
-				comments.addEventListener("input", () => {
+				const surroundingDiv = document.createElement("div");
+				surroundingDiv.setAttribute("id", "linkifiedComments");
+				surroundingDiv.setAttribute("class", "inputtext");
+
+				const replaceDiv = () => {
+					while (surroundingDiv.firstChild) {
+						surroundingDiv.removeChild(surroundingDiv.firstChild);
+					}
+
+					comments.value.split("\n").forEach((line) => {
+						const p = document.createElement("p");
+						const lineNode = document.createTextNode(line);
+						p.appendChild(lineNode);
+						surroundingDiv.appendChild(p);
+					});
+
 					// eslint-disable-next-line no-undef
-					document.querySelector("#linkified_comments p").innerHTML = linkifyHtml(comments.value.split("\n")
-						.join(" <br /> "));
+					linkifyElement(surroundingDiv);
+				};
+				replaceDiv();
+
+				comments.insertAdjacentElement("beforebegin", surroundingDiv);
+				comments.addEventListener("input", () => {
+					replaceDiv();
 				});
 				console.log("created prettified comment area");
 			}
