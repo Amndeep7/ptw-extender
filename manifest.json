@@ -3,7 +3,7 @@
   "author": "Amndeep Singh Mann",
   "name": "PTW Extender",
   "version": "2.2.0",
-  "description": "Adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
+  "description": "Adds titles to your MyAnimeList or AniList plan-to-watch/read list with the url of where you found the title added as a comment.",
 
   "applications": {
     "gecko": {
@@ -23,6 +23,7 @@
   "permissions": [
     "https://myanimelist.net/*",
     "contextMenus",
+    "identity",
     "notifications",
     "storage",
     "tabs",
@@ -34,6 +35,8 @@
       "lib/browser-polyfill.js",
       "options/options-defaults.js",
       "mal/mal.js",
+      "anilist/query.js",
+      "anilist/anilist.js",
       "menu.js"
     ],
     "persistent": false
