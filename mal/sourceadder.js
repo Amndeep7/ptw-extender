@@ -81,7 +81,9 @@ browser.runtime.onMessage.addListener((message, sender) => {
 				console.log("created prettified comment area");
 			}
 
-			return Promise.resolve(true);
+			const title = document.querySelectorAll("#main-form > table > tbody > tr")[0].children[1]
+				.textContent.trim();
+			return Promise.resolve(title);
 		}
 	}
 	return Promise.resolve(false);

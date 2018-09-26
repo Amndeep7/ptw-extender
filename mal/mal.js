@@ -137,7 +137,7 @@ const handleMAL = (tab, urlData, options) => {
 		const refreshRate = 50;
 		(function waiting() {
 			if (urlChanged === true) {
-				if (scriptRun === true) {
+				if (scriptRun) {
 					return resolve();
 				}
 				if (scriptRun === false) {
@@ -167,7 +167,7 @@ const handleMAL = (tab, urlData, options) => {
 			promisedTabHandlerGenerator(variation)(maltab);
 			console.log("waiting");
 			await waitingOnURLChangeResult(10000);
-			return { "title": "Success", "message": "Added title to your MAL PTW list" };
+			return { "title": "Success", "message": `Added ${scriptRun} to your MAL PTW list` };
 		} catch (e) {
 			console.log("Creating MAL tab", variation, "failed due to err:", e);
 			return catchFunc();
