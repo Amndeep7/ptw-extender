@@ -7,7 +7,7 @@ browser.contextMenus.removeAll()
 		console.log("creating context menu");
 		browser.contextMenus.create({
 			"id": menuId,
-			"title": "Add to MAL PTW list",
+			"title": "Add to PTW list",
 			"contexts": ["link"],
 		});
 	})
