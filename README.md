@@ -37,7 +37,7 @@ Having gotten tired of this, I decided to make an extension that would automate 
 ### Build process
 Run `build` to install dependencies locally, move over libraries, generate the icons, and "compile" this readme.
 
-Run the respective utility from each browser to generate the actual extension package that gets uploaded though you're gonna wanna go over the resultant package to make sure that files that shouldn't be in there are removed.
+Run `web-ext build` to generate the extension artifact.  It's just a zip file, but before uploading it anywhere, you can get rid of the `pictures` directory if you want since that'll just bloat the artifact with stuff that's useless for the end-user.
 
 ----
 
