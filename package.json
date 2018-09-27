@@ -19,7 +19,9 @@
     "eslint-plugin-import": "^2.13.0"
   },
   "dependencies": {
+    "dompurify": "^1.0.8",
     "linkifyjs": "^2.1.6",
+    "showdown": "^1.8.6",
     "webextension-polyfill": "^0.3.0"
   }
 }

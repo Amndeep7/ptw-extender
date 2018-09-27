@@ -6,92 +6,100 @@
 	<link rel="stylesheet" href="options.css">
 </head>
 <body>
-	<h1>PTW Extender Options Page</h1>
-	<form>
-		<fieldset>
-			<legend>Extension specific options</legend>
-			<label>
-				<input type="checkbox" name="extension_displayNotifications">
-				Display notifications to display success/failure of actions by the extension
-			</label>
-			<label>
-				<input type="checkbox" name="extension_prettifyCommentsBox">
-				Add an alternate view for the comments box so it's easy to click links
-			</label>
-		</fieldset>
-		<fieldset>
-			<legend>MAL specific options</legend>
-			<label>
-				<input type="checkbox" name="mal_mal">
-				Use MAL as a list site option
-			</label>
-			<div class="dependent" data-dependent-on="mal_mal" data-dependent-property="checked">
+	<span id="optionsPage">
+		<h1>PTW Extender Options Page</h1>
+		<form>
+			<fieldset>
+				<legend>Extension specific options</legend>
 				<label>
-					<input type="checkbox" name="mal_autosubmit">
-					Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
+					<input type="checkbox" name="extension_displayNotifications">
+					Display notifications to display success/failure of actions by the extension
 				</label>
-				<fieldset class="dependent" data-dependent-on="mal_autosubmit" data-dependent-property="checked">
-					<legend>Action to take after hitting submit</legend>
+				<label>
+					<input type="checkbox" name="extension_prettifyCommentsBox">
+					Add an alternate view for the comments box so it's easy to click links
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>MAL specific options</legend>
+				<label>
+					<input type="checkbox" name="mal_mal">
+					Use MAL as a list site option
+				</label>
+				<div class="dependent" data-dependent-on="mal_mal" data-dependent-property="checked">
 					<label>
-						<input type="radio" name="mal_behaviorPostAutosubmit" value="nothing">
-						Do nothing
+						<input type="checkbox" name="mal_autosubmit">
+						Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
 					</label>
-					<label>
-						<input type="radio" name="mal_behaviorPostAutosubmit" value="viewList">
-						View your list
-					</label>
-					<label>
-						<input type="radio" name="mal_behaviorPostAutosubmit" value="titlePage">
-						View the title's page
-					</label>
-					<label>
-						<input type="radio" name="mal_behaviorPostAutosubmit" value="closeTab">
-						Close the tab
-					</label>
-				</fieldset>
-			</div>
-		</fieldset>
-		<fieldset>
-			<legend>AniList specific options</legend>
-			<label>
-				<input type="checkbox" name="anilist_anilist">
-				Use AniList as a list site option
-			</label>
-			<div class="dependent" data-dependent-on="anilist_anilist" data-dependent-property="checked">
-				<input type="button" name="anilist_login" value="Login to AniList">
-				<div>
-					<label>
-						Select which custom lists you want to put the title in - these will be in addition to whichever custom lists the title might already be in.  The set of selectable custom lists only refreshes on login.
-					</label>
-					<fieldset name="anilist_customListsAnime">
-						<legend>Anime custom lists</legend>
-					</fieldset>
-					<fieldset name="anilist_customListsManga">
-						<legend>Manga custom lists</legend>
+					<fieldset class="dependent" data-dependent-on="mal_autosubmit" data-dependent-property="checked">
+						<legend>Action to take after hitting submit</legend>
+						<label>
+							<input type="radio" name="mal_behaviorPostAutosubmit" value="nothing">
+							Do nothing
+						</label>
+						<label>
+							<input type="radio" name="mal_behaviorPostAutosubmit" value="viewList">
+							View your list
+						</label>
+						<label>
+							<input type="radio" name="mal_behaviorPostAutosubmit" value="titlePage">
+							View the title's page
+						</label>
+						<label>
+							<input type="radio" name="mal_behaviorPostAutosubmit" value="closeTab">
+							Close the tab
+						</label>
 					</fieldset>
 				</div>
-				<div>
-					<label>
-						These options will not override the settings for a title that already has an entry in your list.
-					</label>
-					<label>
-						<input type="checkbox" name="anilist_private">
-						Entries are private, i.e. only visible to you
-					</label>
-					<label>
-						<input type="checkbox" name="anilist_hiddenFromStatusLists">
-						Entries are hidden from your status lists (i.e. your non-custom lists, such as "Watching")
-					</label>
+			</fieldset>
+			<fieldset>
+				<legend>AniList specific options</legend>
+				<label>
+					<input type="checkbox" name="anilist_anilist">
+					Use AniList as a list site option
+				</label>
+				<div class="dependent" data-dependent-on="anilist_anilist" data-dependent-property="checked">
+					<input type="button" name="anilist_login" value="Login to AniList">
+					<div>
+						<label>
+							Select which custom lists you want to put the title in - these will be in addition to whichever custom lists the title might already be in.  The set of selectable custom lists only refreshes on login.
+						</label>
+						<fieldset name="anilist_customListsAnime">
+							<legend>Anime custom lists</legend>
+						</fieldset>
+						<fieldset name="anilist_customListsManga">
+							<legend>Manga custom lists</legend>
+						</fieldset>
+					</div>
+					<div>
+						<label>
+							These options will not override the settings for a title that already has an entry in your list.
+						</label>
+						<label>
+							<input type="checkbox" name="anilist_private">
+							Entries are private, i.e. only visible to you
+						</label>
+						<label>
+							<input type="checkbox" name="anilist_hiddenFromStatusLists">
+							Entries are hidden from your status lists (i.e. your non-custom lists, such as "Watching")
+						</label>
+					</div>
 				</div>
-			</div>
-		</fieldset>
-	</form>
-	<div class="results_area">
-		<h4>The last action:</h4>
-		<p id="results">Nothing was changed</p>
-	</div>
+			</fieldset>
+		</form>
+		<div class="results_area">
+			<h4>The last action:</h4>
+			<p id="results">Nothing was changed</p>
+		</div>
+	</span>
+	<span id="notOptionsPage">
+		<div id="changelog" class="rightside"></div>
+		<div id="permissionsExplanation" class="rightside"></div>
+	</span>
 
 	<script type="application/javascript" src="../lib/browser-polyfill.js"></script>
+	<script type="application/javascript" src="../lib/showdown.js"></script>
+	<script type="application/javascript" src="../lib/purify.js"></script>
 	<script type="application/javascript" src="../anilist/query.js"></script>
 	<script type="application/javascript" src="options-defaults.js"></script>
 	<script type="application/javascript" src="options.js"></script>

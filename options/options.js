@@ -282,7 +282,20 @@ const setupDisablingDependentOptions = () => {
 		});
 };
 
+const markdownToHTML = async (url, id) => {
+	const raw = await fetch(browser.runtime.getURL(url));
+	const markdown = await raw.text();
+	// eslint-disable-next-line no-undef
+	const converter = new showdown.Converter();
+	const html = converter.makeHtml(markdown);
+	const clean = DOMPurify.sanitize(html, { "RETURN_DOM": true });
+	document.querySelector(id).appendChild(clean);
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
+	markdownToHTML("readme/permissions_explanation.md", "#permissionsExplanation");
+	markdownToHTML("CHANGELOG.md", "#changelog");
+
 	const optionsVersion = "v1";
 
 	let options = null;

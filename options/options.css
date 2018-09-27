@@ -1,3 +1,12 @@
+body {
+	font-size: 100%;
+}
+
+span {
+	float: left;
+	width: 50%;
+}
+
 label {
 	display: block;
 }
@@ -5,4 +14,15 @@ label {
 /* This could get funky with multiple nested divs that are one right after the other */
 .dependent {
 	margin-left: 5%;
+}
+
+.rightside {
+	height: 49vh;
+	overflow-y: auto;
+	margin-left: 1em;
+}
+
+#permissionsExplanation {
+	border-top-style: solid;
+	border-top-width: thick;
 }
