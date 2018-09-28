@@ -135,3 +135,9 @@ browser.contextMenus.removeAll()
 			}
 		});
 	});
+
+browser.runtime.onInstalled.addListener((details) => {
+	if (["install", "update"].includes(details.reason)) {
+		browser.runtime.openOptionsPage();
+	}
+});
