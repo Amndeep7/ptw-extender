@@ -1,6 +1,5 @@
 /* eslint no-console: "off" */
 /* eslint no-param-reassign: "off" */
-
 const fillFieldsetWithOptions = (name, options, checked) => {
 	const set = document.querySelector(`fieldset[name="${name}"]`);
 	options.forEach((option, index) => {
@@ -288,6 +287,7 @@ const markdownToHTML = async (url, id) => {
 	// eslint-disable-next-line no-undef
 	const converter = new showdown.Converter();
 	const html = converter.makeHtml(markdown);
+	// eslint-disable-next-line no-undef
 	const clean = DOMPurify.sanitize(html, { "RETURN_DOM": true });
 	document.querySelector(id).appendChild(clean);
 };
@@ -307,6 +307,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged options";
 		throw e;
 	}
+
+	const reviewLoc = options[optionsVersion].browser.type === "firefox"
+		? "https://addons.mozilla.org/en-US/firefox/addon/ptw-extender/"
+		: "https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh/reviews";
+	document.querySelector("#review").setAttribute("href", reviewLoc);
 
 	restoreAniListLoginButton(options[optionsVersion]);
 	setupSavingAniListLoginButton(optionsVersion, {
