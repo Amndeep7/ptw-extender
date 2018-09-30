@@ -172,15 +172,15 @@ const setupAnilistCustomLists = async (optionsVersion, accessToken) => {
 	await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
 };
 
-const restoreAniListLoginButton = (options) => {
-	console.log("restoring anilist button");
+const restoreLoginButton = (site, options) => {
+	console.log(`restoring ${site.raw} button`);
 	try {
-		document.querySelector("input[name='anilist_login']").value = options.authentication.anilist.accessToken
-			=== null ? "Login to AniList" : "Logout of AniList";
-		document.querySelector("#results").innerHTML = "Successfully restored AniList button";
+		document.querySelector(`input[name='${site.raw}_login']`).value = options.authentication[site.raw].accessToken
+			=== null ? `Login to ${site.proper}` : `Logout of ${site.proper}`;
+		document.querySelector("#results").innerHTML = `Successfully restored ${site.proper} button`;
 	} catch (e) {
 		console.log("error while restoring", e);
-		document.querySelector("#results").innerHTML = "Didn't successfully restore AniList button";
+		document.querySelector("#results").innerHTML = `Didn't successfully restore ${site.proper} button`;
 	}
 };
 
@@ -204,7 +204,7 @@ const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
 					});
 				} catch (e2) {
 					event.target.value = "Login to AniList";
-					console.log("couldn't log into anilist", e2.message);
+					console.log("couldn't log into anilist", e2);
 					document.querySelector("#results").innerHTML = `Couldn't log into AniList because: "${e2.message}"`;
 					return;
 				}
@@ -240,6 +240,64 @@ const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
 	} catch (e) {
 		console.log("failed using anilist button:", e);
 		document.querySelector("#results").innerHTML = "Failed using AniList button";
+	}
+};
+
+// outter try catch is at the wrong level - should be inside the event listener
+const setupSavingKitsuLoginButton = (optionsVersion) => {
+	try {
+		document.querySelector("input[name='kitsu_login']").addEventListener("click", async (event) => {
+			const options = await browser.storage.local.get(optionsVersion);
+
+			if (options[optionsVersion].authentication.kitsu.accessToken === null) {
+				event.target.value = "Logout of Kitsu";
+
+				const url = "https://kitsu.io/api/oauth/token";
+				const urlOptions = {
+					"method": "POST",
+					"headers": {
+						"Accept": "application/json",
+						"Content-Type": "application/json",
+					},
+					"body": {
+						// kitsu doesn't really have their oauth/security situation figured out yet
+						"client_id": "dd031b32d2f56c990b1425efe6c42ad847e7fe3ab46bf1299f05ecd856bdb7dd",
+						"grant_type": "password",
+						"username": document.querySelector("input[name='kitsu_username']").value,
+						"password": document.querySelector("input[name='kitsu_password']").value,
+					},
+				};
+				urlOptions.body = JSON.stringify(urlOptions.body);
+
+				try {
+					const retrieve = await fetch(url, urlOptions);
+					const { "access_token": accessToken, error } = await retrieve.json();
+					if (accessToken) {
+						options[optionsVersion].authentication.kitsu.accessToken = accessToken;
+						await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
+						document.querySelector("#results").innerHTML = "Logged into Kitsu";
+					} else {
+						event.target.value = "Login to Kitsu";
+						console.log("couldn't log into kitsu cause username/password wrong", error);
+						document.querySelector("#results").innerHTML = "Couldn't log into Kitsu probably due"
+							+ " to incorrect credentials";
+					}
+				} catch (e2) {
+					event.target.value = "Login to Kitsu";
+					console.log("couldn't log into kitsu", e2);
+					document.querySelector("#results").innerHTML = `Couldn't log into Kitsu because: "${e2.message}"`;
+				}
+			} else {
+				event.target.value = "Login to Kitsu";
+
+				options[optionsVersion].authentication.kitsu.accessToken = null;
+				await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
+				document.querySelector("#results").innerHTML = "Logged out of Kitsu";
+			}
+		});
+	} catch (e) {
+		console.log("failed using kitsu button:", e);
+		document.querySelector("#results").innerHTML = "Failed using Kitsu button";
 	}
 };
 
@@ -313,13 +371,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 		: "https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh/reviews";
 	document.querySelector("#review").setAttribute("href", reviewLoc);
 
-	restoreAniListLoginButton(options[optionsVersion]);
+	restoreLoginButton({ "raw": "anilist", "proper": "AniList" }, options[optionsVersion]);
 	setupSavingAniListLoginButton(optionsVersion, {
 		"funcs": [
 			setupAnilistCustomLists,
 		],
 		"args": [],
 	});
+
+	restoreLoginButton({ "raw": "kitsu", "proper": "Kitsu" }, options[optionsVersion]);
+	setupSavingKitsuLoginButton(optionsVersion);
 
 	options = null;
 	try {

@@ -14,6 +14,7 @@ const optionsDefaults = {
 			"anilist_anilist": true,
 			"anilist_private": false,
 			"anilist_hiddenFromStatusLists": false,
+			"kitsu_private": false,
 		},
 		"multipleCheckbox": {
 			// objects should consist of key/value pairs of the form value:checked
@@ -33,6 +34,9 @@ const optionsDefaultsLocal = {
 			"anilist": {
 				"clientId_firefox": 1124,
 				"clientId_chrome": 1125,
+				"accessToken": null,
+			},
+			"kitsu": {
 				"accessToken": null,
 			},
 		},

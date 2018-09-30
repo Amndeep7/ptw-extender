@@ -65,7 +65,12 @@
 						Use AniList as a list site option
 					</label>
 					<div class="dependent" data-dependent-on="anilist_anilist" data-dependent-property="checked">
-						<input type="button" name="anilist_login" value="Login to AniList">
+						<div>
+							<input type="button" name="anilist_login" id="anilist_login" value="Login to AniList">
+							<label for="anilist_login">
+								The access token that is acquired is saved in this extension's local storage and will work for a year after which you'll have to manually log out and log back in here.
+							</label>
+						</div>
 						<div>
 							<label>
 								Select which custom lists you want to put the title in - these will be in addition to whichever custom lists the title might already be in.  The set of selectable custom lists only refreshes on login.
@@ -90,6 +95,33 @@
 								Entries are hidden from your status lists (i.e. your non-custom lists, such as "Watching")
 							</label>
 						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Kitsu specific options</legend>
+					<label>
+						<input type="checkbox" name="kitsu_kitsu">
+						Use Kitsu as a list site option
+					</label>
+					<div class="dependent" data-dependent-on="kitsu_kitsu" data-dependent-property="checked">
+						<div>
+							<label>
+								Username: 
+								<input type="text" name="kitsu_username">
+							</label>
+							<label>
+								Password: 
+								<input type="password" name="kitsu_password">
+							</label>
+							<input type="button" name="kitsu_login" id="kitsu_login" value="Login to Kitsu">
+							<label for="kitsu_login">
+								The access token that is acquired is saved in this extension's local storage and will work for 30 days after which you'll have to manually log out and log back in here.  PTW Extender does not save your username or password whatsoever.
+							</label>
+						</div>
+						<label>
+							<input type="checkbox" name="kitsu_private">
+							Entries are private, i.e. only visible to you
+						</label>
 					</div>
 				</fieldset>
 			</form>
