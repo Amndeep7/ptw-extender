@@ -185,8 +185,8 @@ const restoreLoginButton = (site, options) => {
 };
 
 const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
-	try {
-		document.querySelector("input[name='anilist_login']").addEventListener("click", async (event) => {
+	document.querySelector("input[name='anilist_login']").addEventListener("click", async (event) => {
+		try {
 			const options = await browser.storage.local.get(optionsVersion);
 
 			if (options[optionsVersion].authentication.anilist.accessToken === null) {
@@ -236,17 +236,16 @@ const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
 				optionsSync[optionsVersion].multipleCheckbox.anilist_customListsManga = {};
 				await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
 			}
-		});
-	} catch (e) {
-		console.log("failed using anilist button:", e);
-		document.querySelector("#results").innerHTML = "Failed using AniList button";
-	}
+		} catch (e) {
+			console.log("failed using anilist button:", e);
+			document.querySelector("#results").innerHTML = "Failed using AniList button";
+		}
+	});
 };
 
-// outter try catch is at the wrong level - should be inside the event listener
 const setupSavingKitsuLoginButton = (optionsVersion) => {
-	try {
-		document.querySelector("input[name='kitsu_login']").addEventListener("click", async (event) => {
+	document.querySelector("input[name='kitsu_login']").addEventListener("click", async (event) => {
+		try {
 			const options = await browser.storage.local.get(optionsVersion);
 
 			if (options[optionsVersion].authentication.kitsu.accessToken === null) {
@@ -294,11 +293,11 @@ const setupSavingKitsuLoginButton = (optionsVersion) => {
 				await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
 				document.querySelector("#results").innerHTML = "Logged out of Kitsu";
 			}
-		});
-	} catch (e) {
-		console.log("failed using kitsu button:", e);
-		document.querySelector("#results").innerHTML = "Failed using Kitsu button";
-	}
+		} catch (e) {
+			console.log("failed using kitsu button:", e);
+			document.querySelector("#results").innerHTML = "Failed using Kitsu button";
+		}
+	});
 };
 
 const setupDisablingDependentOptions = () => {
