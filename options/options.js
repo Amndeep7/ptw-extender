@@ -1,5 +1,13 @@
 /* eslint no-console: "off" */
 /* eslint no-param-reassign: "off" */
+
+// doesn't completely empty the node - leaves the first element child in there
+const emptyNode = (node) => {
+	while (node.lastElementChild && node.firstElementChild !== node.lastElementChild) {
+		node.removeChild(node.lastElementChild);
+	}
+};
+
 const fillFieldsetWithOptions = (name, options, checked) => {
 	const set = document.querySelector(`fieldset[name="${name}"]`);
 	options.forEach((option, index) => {
@@ -24,14 +32,9 @@ const restoreCheckboxOption = (option, checked) => {
 };
 
 const restoreMultipleCheckboxOption = (option, values) => {
-	if (document.querySelector(`input[type=checkbox][name="${option}"]`) === null) {
-		fillFieldsetWithOptions(option, Object.keys(values), Object.values(values));
-	}
-
-	Object.entries(values).forEach((value) => {
-		// eslint-disable-next-line prefer-destructuring
-		document.querySelector(`input[type=checkbox][name="${option}"][value="${value[0]}"]`).checked = value[1];
-	});
+	const fieldset = document.querySelector(`fieldset[name="${option}"]`);
+	emptyNode(fieldset);
+	fillFieldsetWithOptions(option, Object.keys(values), Object.values(values));
 };
 
 const restoreRadioOption = (option, value) => {
@@ -126,7 +129,16 @@ const runSteps = (steps, args) => {
 	});
 };
 
-const setupAnilistCustomLists = async (optionsVersion, accessToken) => {
+const setupAniListCustomLists = async (optionsVersion, accessToken) => {
+	const optionsSync = await browser.storage.sync.get(optionsVersion);
+
+	if (accessToken === null) {
+		optionsSync[optionsVersion].multipleCheckbox.anilist_customListsAnime = {};
+		optionsSync[optionsVersion].multipleCheckbox.anilist_customListsManga = {};
+		await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
+		return;
+	}
+
 	const queryRetrieveCustomLists = {
 		"query": `
 			query retrieveCustomLists {
@@ -166,7 +178,6 @@ const setupAnilistCustomLists = async (optionsVersion, accessToken) => {
 	fillFieldsetWithOptions("anilist_customListsManga", mangalists, Array(mangalists.length).fill(false));
 
 	const reducer = (customLists, list) => { customLists[list] = false; return customLists; };
-	const optionsSync = await browser.storage.sync.get(optionsVersion);
 	optionsSync[optionsVersion].multipleCheckbox.anilist_customListsAnime = animelists.reduce(reducer, {});
 	optionsSync[optionsVersion].multipleCheckbox.anilist_customListsManga = mangalists.reduce(reducer, {});
 	await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
@@ -223,11 +234,6 @@ const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
 				await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
 				document.querySelector("#results").innerHTML = "Logged out of AniList";
 
-				const emptyNode = (node) => {
-					while (node.lastElementChild && node.firstElementChild !== node.lastElementChild) {
-						node.removeChild(node.lastElementChild);
-					}
-				};
 				emptyNode(document.querySelector("fieldset[name='anilist_customListsAnime']"));
 				emptyNode(document.querySelector("fieldset[name='anilist_customListsManga']"));
 
@@ -373,10 +379,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 	restoreLoginButton({ "raw": "anilist", "proper": "AniList" }, options[optionsVersion]);
 	setupSavingAniListLoginButton(optionsVersion, {
 		"funcs": [
-			setupAnilistCustomLists,
+			setupAniListCustomLists,
 		],
 		"args": [],
 	});
+	setupAniListCustomLists(optionsVersion, options[optionsVersion].authentication.anilist.accessToken);
 
 	restoreLoginButton({ "raw": "kitsu", "proper": "Kitsu" }, options[optionsVersion]);
 	setupSavingKitsuLoginButton(optionsVersion);
