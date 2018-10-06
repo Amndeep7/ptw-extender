@@ -61,7 +61,7 @@ const optionsDefaultsLocal = {
 
 	try {
 		options = await browser.storage.local.get(optionsDefaultsLocal);
-		await browser.storage.local.set(optionsDefaultsLocal);
+		await browser.storage.local.set(options);
 	} catch (e) {
 		console.log("error while restoring from local defaults", e);
 		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged local options";
