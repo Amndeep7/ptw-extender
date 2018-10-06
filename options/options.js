@@ -363,7 +363,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	let options = null;
 	try {
-		// eslint-disable-next-line no-undef
 		options = await browser.storage.local.get();
 	} catch (e) {
 		console.log("error while restoring while in listener", e);
@@ -383,14 +382,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		],
 		"args": [],
 	});
-	setupAniListCustomLists(optionsVersion, options[optionsVersion].authentication.anilist.accessToken);
 
 	restoreLoginButton({ "raw": "kitsu", "proper": "Kitsu" }, options[optionsVersion]);
 	setupSavingKitsuLoginButton(optionsVersion);
 
 	options = null;
 	try {
-		// eslint-disable-next-line no-undef
 		options = await browser.storage.sync.get();
 	} catch (e) {
 		console.log("error while restoring while in listener", e);
