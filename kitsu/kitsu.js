@@ -122,7 +122,8 @@ const handleKitsu = async (tab, urlData, options) => {
 		// eslint-disable-next-line prefer-destructuring
 		notes = data[0].attributes.notes;
 	}
-	notes = `${(notes === null || notes === "" ? "" : `${notes}\n`)}${new Date().toLocaleString()} -> ${tab.url}`;
+	// eslint-disable-next-line no-undef
+	notes = `${(notes === null || notes === "" ? "" : `${notes}\n`)}${generateNote(tab.url)}`;
 
 	try {
 		const entryType = "libraryEntries";

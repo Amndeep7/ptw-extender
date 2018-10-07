@@ -14,7 +14,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
 			console.log("displaying advanced section");
 
 			const comments = document.querySelector(`#add_${message.type}_comments`);
-			const comment = `${new Date().toLocaleString()} -> ${message.taburl}`;
+			// eslint-disable-next-line no-undef
+			const comment = `${generateNote(message.taburl)}`;
 			if (comments.value.length === 0) {
 				comments.value += `${""}${comment}`;
 			} else {

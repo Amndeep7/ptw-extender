@@ -34,6 +34,7 @@
     "scripts": [
       "lib/browser-polyfill.js",
       "options/options-defaults.js",
+      "generic/generic.js",
       "mal/mal.js",
       "anilist/query.js",
       "anilist/anilist.js",

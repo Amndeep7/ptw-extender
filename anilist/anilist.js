@@ -80,7 +80,8 @@ const handleAniList = async (tab, urlData, options) => {
 
 	const oldnotes = data.Media.mediaListEntry && data.Media.mediaListEntry.notes
 		? data.Media.mediaListEntry.notes : "";
-	const notes = `${new Date().toLocaleString()} -> ${tab.url}`;
+	// eslint-disable-next-line no-undef
+	const notes = `${generateNote(tab.url)}`;
 
 	const variables = { "id": urlData.id };
 
