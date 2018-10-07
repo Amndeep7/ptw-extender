@@ -37,6 +37,7 @@
       "mal/mal.js",
       "anilist/query.js",
       "anilist/anilist.js",
+      "kitsu/kitsu.js",
       "menu.js"
     ],
     "persistent": false

@@ -60,12 +60,17 @@ browser.contextMenus.removeAll()
 			}
 		});
 
-		const Sites = Object.freeze({ "mal": Symbol("MyAnimeList"), "anilist": Symbol("AniList") });
+		const Sites = Object.freeze({
+			"mal": Symbol("MyAnimeList"),
+			"anilist": Symbol("AniList"),
+			"kitsu": Symbol("Kitsu"),
+		});
 
 		const validateAndMineURL = (url, notIgnoring) => {
 			const matchFuncs = {
 				"mal": matchOnMAL, // eslint-disable-line no-undef
 				"anilist": matchOnAniList, // eslint-disable-line no-undef
+				"kitsu": matchOnKitsu, // eslint-disable-line no-undef
 			};
 
 			// eslint-disable-next-line no-restricted-syntax
@@ -100,6 +105,7 @@ browser.contextMenus.removeAll()
 				const notIgnoring = {
 					"mal": options.checkbox.mal_mal,
 					"anilist": options.checkbox.anilist_anilist,
+					"kitsu": options.checkbox.kitsu_kitsu,
 				};
 				const urlData = validateAndMineURL(info.linkUrl, notIgnoring);
 				if (urlData && !urlData.notIgnoring) {
@@ -123,6 +129,12 @@ browser.contextMenus.removeAll()
 						"hiddenFromStatusLists": options.checkbox.anilist_hiddenFromStatusLists,
 						"customListsAnime": options.multipleCheckbox.anilist_customListsAnime,
 						"customListsManga": options.multipleCheckbox.anilist_customListsManga,
+					}));
+				} else if (urlData && urlData.source === Sites.kitsu) {
+					// eslint-disable-next-line no-undef
+					createNotification(await handleKitsu(tab, urlData, {
+						"accessToken": optionsLocal.authentication.kitsu.accessToken,
+						"private": options.checkbox.kitsu_private,
 					}));
 				} else {
 					console.log("Match fail");
