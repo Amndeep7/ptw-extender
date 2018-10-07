@@ -22,6 +22,12 @@ label {
 	margin-left: 1em;
 }
 
+#notOptionsPage {
+	border-left-style: solid;
+	border-left-width: thick;
+	position: fixed;
+}
+
 #permissionsExplanation {
 	border-top-style: solid;
 	border-top-width: thick;
