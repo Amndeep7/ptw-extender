@@ -74,7 +74,7 @@ const handleKitsu = async (tab, urlData, options) => {
 	}
 
 	const { "id": titleId, "type": mediaType } = data[0];
-	const { "en_jp": title } = data[0].attributes.titles;
+	const { "canonicalTitle": title } = data[0].attributes;
 
 	try {
 		[data, meta, errors] = await sendKitsuQuery(options.accessToken, "GET", "users?filter[self]=true");
