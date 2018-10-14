@@ -398,56 +398,64 @@ document.addEventListener("DOMContentLoaded", async () => {
 	markdownToHTML("readme/permissions_explanation.md", "#permissionsExplanation");
 	markdownToHTML("CHANGELOG.md", "#changelog");
 
-	let options = null;
-	try {
-		options = await browser.storage.local.get();
-	} catch (e) {
-		console.log("error while restoring while in listener", e);
-		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged options";
-		throw e;
-	}
+	const intervalId = setInterval(async () => {
+		// eslint-disable-next-line no-undef
+		if (optionsLock) {
+			return;
+		}
+		clearInterval(intervalId);
 
-	// eslint-disable-next-line no-undef
-	const reviewLoc = options[optionsVersion].browser.type === "firefox"
-		? "https://addons.mozilla.org/en-US/firefox/addon/ptw-extender/"
-		: "https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh/reviews";
-	document.querySelector("#review").setAttribute("href", reviewLoc);
+		let options = null;
+		try {
+			options = await browser.storage.local.get();
+		} catch (e) {
+			console.log("error while restoring while in listener", e);
+			document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged options";
+			throw e;
+		}
 
-	// eslint-disable-next-line no-undef
-	restoreLoginButton({ "raw": "anilist", "proper": "AniList" }, options[optionsVersion]);
-	setupSavingAniListLoginButton({
-		"funcs": [
-			setupAniListCustomLists,
-		],
-		"args": [],
-	});
+		// eslint-disable-next-line no-undef
+		const reviewLoc = options[optionsVersion].browser.type === "firefox"
+			? "https://addons.mozilla.org/en-US/firefox/addon/ptw-extender/"
+			: "https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh/reviews";
+		document.querySelector("#review").setAttribute("href", reviewLoc);
 
-	// eslint-disable-next-line no-undef
-	restoreLoginButton({ "raw": "kitsu", "proper": "Kitsu" }, options[optionsVersion]);
-	setupSavingKitsuLoginButton();
+		// eslint-disable-next-line no-undef
+		restoreLoginButton({ "raw": "anilist", "proper": "AniList" }, options[optionsVersion]);
+		setupSavingAniListLoginButton({
+			"funcs": [
+				setupAniListCustomLists,
+			],
+			"args": [],
+		});
 
-	options = null;
-	try {
-		options = await browser.storage.sync.get();
-	} catch (e) {
-		console.log("error while restoring while in listener", e);
-		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged options";
-		throw e;
-	}
+		// eslint-disable-next-line no-undef
+		restoreLoginButton({ "raw": "kitsu", "proper": "Kitsu" }, options[optionsVersion]);
+		setupSavingKitsuLoginButton();
 
-	// eslint-disable-next-line no-undef
-	restoreOptions(options[optionsVersion], "checkbox", restoreCheckboxOption);
-	// eslint-disable-next-line no-undef
-	restoreOptions(options[optionsVersion], "radio", restoreRadioOption);
-	// eslint-disable-next-line no-undef
-	restoreOptions(options[optionsVersion], "multipleCheckbox", restoreMultipleCheckboxOption);
-	// eslint-disable-next-line no-undef
-	restoreOptions(options[optionsVersion], "textarea", restoreTextareaOption);
+		options = null;
+		try {
+			options = await browser.storage.sync.get();
+		} catch (e) {
+			console.log("error while restoring while in listener", e);
+			document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged options";
+			throw e;
+		}
 
-	setupSavingCheckboxOptions();
-	setupSavingMultipleCheckboxOptions();
-	setupSavingRadioOptions();
-	setupSavingTextareaOptions();
+		// eslint-disable-next-line no-undef
+		restoreOptions(options[optionsVersion], "checkbox", restoreCheckboxOption);
+		// eslint-disable-next-line no-undef
+		restoreOptions(options[optionsVersion], "radio", restoreRadioOption);
+		// eslint-disable-next-line no-undef
+		restoreOptions(options[optionsVersion], "multipleCheckbox", restoreMultipleCheckboxOption);
+		// eslint-disable-next-line no-undef
+		restoreOptions(options[optionsVersion], "textarea", restoreTextareaOption);
 
-	setupDisablingDependentOptions();
+		setupSavingCheckboxOptions();
+		setupSavingMultipleCheckboxOptions();
+		setupSavingRadioOptions();
+		setupSavingTextareaOptions();
+
+		setupDisablingDependentOptions();
+	}, 50);
 });
