@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [2.2.0] - 2018-10-14
+#### Added
+- Support for AniList
+  - Doesn't work for Firefox until the fix for the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1494328) I reported is included in a release, which as of right now is ESR60.3 and release 63 (the later of which comes out 2018-10-23)
+- Support for Kitsu
+#### Changed
+- The manner in which PTW Extender generates the comments/notes box is now done more securely
+- The context menu option and all sorts of documentation now reflect that PTW Extender works with multiple sites and not just MAL
+- Options page
+  - Shows up on install/update
+  - Includes this changelog and an explanation of permissions
+  - Now features lots more options
+#### Fixed
+- MAL notifications now include the title when it's added to your list successfully
+
 ### [2.1.1] - 2018-09-12
 #### Added
 - Current date/time gets printed alongside the url
@@ -52,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [1.1.0] - 2018-07-04
 #### Fixed
-- MAL went down and then also changed their urls around, so now we're using MAL's new url system
+- MAL went down and then also changed their urls around, so now PTW Extender is using MAL's new url system
 
 ### [1.0.0] - 2017-11-19
 #### Added
