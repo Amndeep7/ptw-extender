@@ -67,11 +67,14 @@ const saveOption = async (option, modifiers) => {
 		// every time a change is desired, change the the contents accordingly, and then push the contents back up.
 		// wasteful, but it helps maintain organization and it's not like there's lots of options nor will a user be
 		// constantly changing them so i'm fine with it
-		const options = await browser.storage.sync.get(modifiers.version);
-		options[modifiers.version][modifiers.type][option.target.name] = modifiers.isProperty
+		// eslint-disable-next-line no-undef
+		const options = await browser.storage.sync.get(optionsVersion);
+		// eslint-disable-next-line no-undef
+		options[optionsVersion][modifiers.type][option.target.name] = modifiers.isProperty
 			? option.target[modifiers.property] : modifiers.property;
 		await browser.storage.sync.set({
-			[modifiers.version]: options[modifiers.version],
+			// eslint-disable-next-line no-undef
+			[optionsVersion]: options[optionsVersion],
 		});
 
 		if (modifiers.isProperty) {
@@ -87,11 +90,10 @@ const saveOption = async (option, modifiers) => {
 	}
 };
 
-const setupSavingCheckboxOptions = (optionsVersion) => {
+const setupSavingCheckboxOptions = () => {
 	document.querySelectorAll("input[type=checkbox]:not([value])")
 		.forEach((option) => option.addEventListener("change", (o) => {
 			saveOption(o, {
-				"version": optionsVersion,
 				"type": "checkbox",
 				"isProperty": true,
 				"property": "checked",
@@ -100,14 +102,13 @@ const setupSavingCheckboxOptions = (optionsVersion) => {
 };
 
 // pass the object along as the property for saveOption
-const setupSavingMultipleCheckboxOptions = (optionsVersion) => {
+const setupSavingMultipleCheckboxOptions = () => {
 	document.querySelectorAll("fieldset[name]").forEach((fieldset) => fieldset.addEventListener("change", (o) => {
 		const values = {};
 		document.querySelectorAll(`input[type=checkbox][name="${fieldset.name}"]`).forEach((input) => {
 			values[input.value] = input.checked;
 		});
 		saveOption(o, {
-			"version": optionsVersion,
 			"type": "multipleCheckbox",
 			"isProperty": false,
 			"property": values,
@@ -115,11 +116,10 @@ const setupSavingMultipleCheckboxOptions = (optionsVersion) => {
 	}));
 };
 
-const setupSavingRadioOptions = (optionsVersion) => {
+const setupSavingRadioOptions = () => {
 	document.querySelectorAll("input[type=radio]")
 		.forEach((option) => option.addEventListener("change", (o) => {
 			saveOption(o, {
-				"version": optionsVersion,
 				"type": "radio",
 				"isProperty": true,
 				"property": "value",
@@ -127,11 +127,10 @@ const setupSavingRadioOptions = (optionsVersion) => {
 		}));
 };
 
-const setupSavingTextareaOptions = (optionsVersion) => {
+const setupSavingTextareaOptions = () => {
 	document.querySelectorAll("textarea")
 		.forEach((option) => option.addEventListener("input", (o) => {
 			saveOption(o, {
-				"version": optionsVersion,
 				"type": "textarea",
 				"isProperty": true,
 				"property": "value",
@@ -145,12 +144,16 @@ const runSteps = (steps, args) => {
 	});
 };
 
-const setupAniListCustomLists = async (optionsVersion, accessToken) => {
+const setupAniListCustomLists = async (accessToken) => {
+	// eslint-disable-next-line no-undef
 	const optionsSync = await browser.storage.sync.get(optionsVersion);
 
 	if (accessToken === null) {
+		// eslint-disable-next-line no-undef
 		optionsSync[optionsVersion].multipleCheckbox.anilist_customListsAnime = {};
+		// eslint-disable-next-line no-undef
 		optionsSync[optionsVersion].multipleCheckbox.anilist_customListsManga = {};
+		// eslint-disable-next-line no-undef
 		await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
 		return;
 	}
@@ -194,8 +197,11 @@ const setupAniListCustomLists = async (optionsVersion, accessToken) => {
 	fillFieldsetWithOptions("anilist_customListsManga", mangalists, Array(mangalists.length).fill(false));
 
 	const reducer = (customLists, list) => { customLists[list] = false; return customLists; };
+	// eslint-disable-next-line no-undef
 	optionsSync[optionsVersion].multipleCheckbox.anilist_customListsAnime = animelists.reduce(reducer, {});
+	// eslint-disable-next-line no-undef
 	optionsSync[optionsVersion].multipleCheckbox.anilist_customListsManga = mangalists.reduce(reducer, {});
+	// eslint-disable-next-line no-undef
 	await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
 };
 
@@ -211,15 +217,19 @@ const restoreLoginButton = (site, options) => {
 	}
 };
 
-const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
+const setupSavingAniListLoginButton = (postAuthentication) => {
 	document.querySelector("input[name='anilist_login']").addEventListener("click", async (event) => {
 		try {
+			// eslint-disable-next-line no-undef
 			const options = await browser.storage.local.get(optionsVersion);
 
+			// eslint-disable-next-line no-undef
 			if (options[optionsVersion].authentication.anilist.accessToken === null) {
 				event.target.value = "Logout of AniList";
 
+				// eslint-disable-next-line no-undef
 				const clientId = options[optionsVersion].authentication
+					// eslint-disable-next-line no-undef
 					.anilist[`clientId_${options[optionsVersion].browser.type}`];
 				const redirectRequestUrl = "https://anilist.co/api/v2/oauth/authorize?response_type=token&"
 					+ `client_id=${clientId}`;
@@ -236,26 +246,33 @@ const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
 					return;
 				}
 				const accessToken = redirectUrl.match(/#access_token=(.*?)&/)[1];
+				// eslint-disable-next-line no-undef
 				options[optionsVersion].authentication.anilist.accessToken = accessToken;
+				// eslint-disable-next-line no-undef
 				await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
 				document.querySelector("#results").innerHTML = "Logged into AniList";
 
 				postAuthentication.args.unshift(accessToken);
-				postAuthentication.args.unshift(optionsVersion);
 				runSteps(postAuthentication.funcs, postAuthentication.args);
 			} else {
 				event.target.value = "Login to AniList";
 
+				// eslint-disable-next-line no-undef
 				options[optionsVersion].authentication.anilist.accessToken = null;
+				// eslint-disable-next-line no-undef
 				await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
 				document.querySelector("#results").innerHTML = "Logged out of AniList";
 
 				emptyNode(document.querySelector("fieldset[name='anilist_customListsAnime']"));
 				emptyNode(document.querySelector("fieldset[name='anilist_customListsManga']"));
 
+				// eslint-disable-next-line no-undef
 				const optionsSync = await browser.storage.sync.get(optionsVersion);
+				// eslint-disable-next-line no-undef
 				optionsSync[optionsVersion].multipleCheckbox.anilist_customListsAnime = {};
+				// eslint-disable-next-line no-undef
 				optionsSync[optionsVersion].multipleCheckbox.anilist_customListsManga = {};
+				// eslint-disable-next-line no-undef
 				await browser.storage.sync.set({ [optionsVersion]: optionsSync[optionsVersion] });
 			}
 		} catch (e) {
@@ -265,11 +282,13 @@ const setupSavingAniListLoginButton = (optionsVersion, postAuthentication) => {
 	});
 };
 
-const setupSavingKitsuLoginButton = (optionsVersion) => {
+const setupSavingKitsuLoginButton = () => {
 	document.querySelector("input[name='kitsu_login']").addEventListener("click", async (event) => {
 		try {
+			// eslint-disable-next-line no-undef
 			const options = await browser.storage.local.get(optionsVersion);
 
+			// eslint-disable-next-line no-undef
 			if (options[optionsVersion].authentication.kitsu.accessToken === null) {
 				event.target.value = "Logout of Kitsu";
 
@@ -294,7 +313,9 @@ const setupSavingKitsuLoginButton = (optionsVersion) => {
 					const retrieve = await fetch(url, urlOptions);
 					const { "access_token": accessToken, error } = await retrieve.json();
 					if (accessToken) {
+						// eslint-disable-next-line no-undef
 						options[optionsVersion].authentication.kitsu.accessToken = accessToken;
+						// eslint-disable-next-line no-undef
 						await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
 						document.querySelector("#results").innerHTML = "Logged into Kitsu";
 					} else {
@@ -311,7 +332,9 @@ const setupSavingKitsuLoginButton = (optionsVersion) => {
 			} else {
 				event.target.value = "Login to Kitsu";
 
+				// eslint-disable-next-line no-undef
 				options[optionsVersion].authentication.kitsu.accessToken = null;
+				// eslint-disable-next-line no-undef
 				await browser.storage.local.set({ [optionsVersion]: options[optionsVersion] });
 				document.querySelector("#results").innerHTML = "Logged out of Kitsu";
 			}
@@ -375,8 +398,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 	markdownToHTML("readme/permissions_explanation.md", "#permissionsExplanation");
 	markdownToHTML("CHANGELOG.md", "#changelog");
 
-	const optionsVersion = "v1";
-
 	let options = null;
 	try {
 		options = await browser.storage.local.get();
@@ -386,21 +407,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 		throw e;
 	}
 
+	// eslint-disable-next-line no-undef
 	const reviewLoc = options[optionsVersion].browser.type === "firefox"
 		? "https://addons.mozilla.org/en-US/firefox/addon/ptw-extender/"
 		: "https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh/reviews";
 	document.querySelector("#review").setAttribute("href", reviewLoc);
 
+	// eslint-disable-next-line no-undef
 	restoreLoginButton({ "raw": "anilist", "proper": "AniList" }, options[optionsVersion]);
-	setupSavingAniListLoginButton(optionsVersion, {
+	setupSavingAniListLoginButton({
 		"funcs": [
 			setupAniListCustomLists,
 		],
 		"args": [],
 	});
 
+	// eslint-disable-next-line no-undef
 	restoreLoginButton({ "raw": "kitsu", "proper": "Kitsu" }, options[optionsVersion]);
-	setupSavingKitsuLoginButton(optionsVersion);
+	setupSavingKitsuLoginButton();
 
 	options = null;
 	try {
@@ -411,15 +435,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 		throw e;
 	}
 
+	// eslint-disable-next-line no-undef
 	restoreOptions(options[optionsVersion], "checkbox", restoreCheckboxOption);
+	// eslint-disable-next-line no-undef
 	restoreOptions(options[optionsVersion], "radio", restoreRadioOption);
+	// eslint-disable-next-line no-undef
 	restoreOptions(options[optionsVersion], "multipleCheckbox", restoreMultipleCheckboxOption);
+	// eslint-disable-next-line no-undef
 	restoreOptions(options[optionsVersion], "textarea", restoreTextareaOption);
 
-	setupSavingCheckboxOptions(optionsVersion);
-	setupSavingMultipleCheckboxOptions(optionsVersion);
-	setupSavingRadioOptions(optionsVersion);
-	setupSavingTextareaOptions(optionsVersion);
+	setupSavingCheckboxOptions();
+	setupSavingMultipleCheckboxOptions();
+	setupSavingRadioOptions();
+	setupSavingTextareaOptions();
 
 	setupDisablingDependentOptions();
 });

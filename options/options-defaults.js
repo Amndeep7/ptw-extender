@@ -51,6 +51,10 @@ const optionsDefaultsLocal = {
 	},
 };
 
+// now that optionsVersion is here, doesn't need to be passed along in all the places its being used so yee
+// eslint-disable-next-line no-unused-vars
+const optionsVersion = "v1";
+
 (async () => {
 	console.log("options being set");
 	// make sure the defaults are assigned, but don't override any changed settings

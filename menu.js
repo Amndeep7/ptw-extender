@@ -16,12 +16,12 @@ browser.contextMenus.removeAll()
 		throw e;
 	})
 	.then(async () => {
-		const optionsVersion = "v1";
 		let optionsWithVersioning = {};
 		let options = {};
 		try {
 			// eslint-disable-next-line no-undef
 			optionsWithVersioning = await browser.storage.sync.get();
+			// eslint-disable-next-line no-undef
 			options = optionsWithVersioning[optionsVersion];
 		} catch (e) {
 			console.log("error while getting options", e);
@@ -33,6 +33,7 @@ browser.contextMenus.removeAll()
 		try {
 			// eslint-disable-next-line no-undef
 			optionsWithVersioningLocal = await browser.storage.local.get();
+			// eslint-disable-next-line no-undef
 			optionsLocal = optionsWithVersioningLocal[optionsVersion];
 		} catch (e) {
 			console.log("error while getting options", e);
@@ -46,12 +47,14 @@ browser.contextMenus.removeAll()
 				Object.entries(changes).forEach((change) => {
 					optionsWithVersioning[change[0]] = change[1].newValue;
 				});
+				// eslint-disable-next-line no-undef
 				options = optionsWithVersioning[optionsVersion];
 				break;
 			case "local":
 				Object.entries(changes).forEach((change) => {
 					optionsWithVersioningLocal[change[0]] = change[1].newValue;
 				});
+				// eslint-disable-next-line no-undef
 				optionsLocal = optionsWithVersioningLocal[optionsVersion];
 				break;
 			default:
