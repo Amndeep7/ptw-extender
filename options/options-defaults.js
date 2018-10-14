@@ -27,6 +27,9 @@ const optionsDefaults = {
 			"mal_behaviorPostAutosubmit": "titlePage",
 			"mal_priority": "low",
 		},
+		"textarea": {
+			"mal_tags": "",
+		},
 	},
 };
 

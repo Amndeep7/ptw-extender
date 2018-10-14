@@ -63,7 +63,7 @@ const handleMAL = (tab, urlData, options) => {
 								"id": "sourceadder",
 								"taburl": tab.url,
 								"type": urlData.type,
-								"options": { "priority": options.priority },
+								"options": { "priority": options.priority, "tags": options.tags },
 							});
 
 							console.log("scriptRun val", scriptRun);

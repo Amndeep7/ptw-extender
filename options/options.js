@@ -41,6 +41,10 @@ const restoreRadioOption = (option, value) => {
 	document.querySelector("form").elements[option].value = value;
 };
 
+const restoreTextareaOption = (option, value) => {
+	document.querySelector(`textarea[name="${option}"]`).value = value;
+};
+
 const restoreOptions = (options, type, restoreOption) => {
 	console.log(`restoring ${type} options`);
 	try {
@@ -117,6 +121,18 @@ const setupSavingRadioOptions = (optionsVersion) => {
 			saveOption(o, {
 				"version": optionsVersion,
 				"type": "radio",
+				"isProperty": true,
+				"property": "value",
+			});
+		}));
+};
+
+const setupSavingTextareaOptions = (optionsVersion) => {
+	document.querySelectorAll("textarea")
+		.forEach((option) => option.addEventListener("input", (o) => {
+			saveOption(o, {
+				"version": optionsVersion,
+				"type": "textarea",
 				"isProperty": true,
 				"property": "value",
 			});
@@ -310,8 +326,8 @@ const setupDisablingDependentOptions = () => {
 	// dependent class and associated attributes should only be applied to wrapping divs
 	document.querySelectorAll(".dependent")
 		.forEach((dependent) => {
-			// might need to come back to add more tags other than input
-			dependent.querySelectorAll("input").forEach((input) => {
+			// might need to come back to add more tags other than input and textarea
+			dependent.querySelectorAll("input, textarea").forEach((input) => {
 				const value = ((v) => {
 					// https://stackoverflow.com/a/23752239/645647 - example on how to use empty + custom data attributes
 					// undefined means attribute not there, "" means attribute there using empty attribute syntax or
@@ -398,10 +414,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 	restoreOptions(options[optionsVersion], "checkbox", restoreCheckboxOption);
 	restoreOptions(options[optionsVersion], "radio", restoreRadioOption);
 	restoreOptions(options[optionsVersion], "multipleCheckbox", restoreMultipleCheckboxOption);
+	restoreOptions(options[optionsVersion], "textarea", restoreTextareaOption);
 
 	setupSavingCheckboxOptions(optionsVersion);
 	setupSavingMultipleCheckboxOptions(optionsVersion);
 	setupSavingRadioOptions(optionsVersion);
+	setupSavingTextareaOptions(optionsVersion);
 
 	setupDisablingDependentOptions();
 });

@@ -121,6 +121,7 @@ browser.contextMenus.removeAll()
 						"autosubmit": options.checkbox.mal_autosubmit,
 						"behaviorPostAutosubmit": options.radio.mal_behaviorPostAutosubmit,
 						"priority": options.radio.mal_priority,
+						"tags": options.textarea.mal_tags,
 					}));
 				} else if (urlData && urlData.source === Sites.anilist) {
 					// eslint-disable-next-line no-undef

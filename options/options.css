@@ -11,6 +11,17 @@ label {
 	display: block;
 }
 
+.flex {
+	display: flex
+}
+
+label textarea {
+	vertical-align: text-top;
+	flex: 1;
+	height: 3.5em;
+	margin-left: 1em;
+}
+
 /* This could get funky with multiple nested divs that are one right after the other */
 .dependent {
 	margin-left: 5%;
