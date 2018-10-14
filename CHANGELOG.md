@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [2.2.0] - 2018-10-14
 #### Added
 - Support for AniList
-  - Doesn't work for Firefox until the fix for the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1494328) I reported is included in a release, which as of right now is ESR60.3 and release 63 (the later of which comes out 2018-10-23)
+	- Doesn't work for Firefox until the fix for the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1494328) I reported is included in a release, which as of right now is ESR60.3 and release 63 (the later of which comes out 2018-10-23)
 - Support for Kitsu
 #### Changed
 - The manner in which PTW Extender generates the comments/notes box is now done more securely
