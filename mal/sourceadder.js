@@ -53,35 +53,6 @@ browser.runtime.onMessage.addListener((message, sender) => {
 				}
 			}
 
-			if (message.options.prettifyCommentsBox) {
-				const surroundingDiv = document.createElement("div");
-				surroundingDiv.setAttribute("id", "linkifiedComments");
-				surroundingDiv.setAttribute("class", "inputtext");
-
-				const replaceDiv = () => {
-					while (surroundingDiv.firstChild) {
-						surroundingDiv.removeChild(surroundingDiv.firstChild);
-					}
-
-					comments.value.split("\n").forEach((line) => {
-						const p = document.createElement("p");
-						const lineNode = document.createTextNode(line);
-						p.appendChild(lineNode);
-						surroundingDiv.appendChild(p);
-					});
-
-					// eslint-disable-next-line no-undef
-					linkifyElement(surroundingDiv);
-				};
-				replaceDiv();
-
-				comments.insertAdjacentElement("beforebegin", surroundingDiv);
-				comments.addEventListener("input", () => {
-					replaceDiv();
-				});
-				console.log("created prettified comment area");
-			}
-
 			const title = document.querySelectorAll("#main-form > table > tbody > tr")[0].children[1]
 				.textContent.trim();
 			return Promise.resolve(title);

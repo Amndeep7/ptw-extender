@@ -47,5 +47,39 @@
   "options_ui": {
     "page": "options/options.html",
     "open_in_tab": true
-  }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://anilist.co/*"],
+      "js": [
+        "lib/browser-polyfill.js",
+        "lib/linkify.js",
+        "lib/linkify-element.js",
+        "anilist/prettified.js",
+        "generic/prettified.js"
+      ]
+    },
+    {
+      "matches": ["*://kitsu.io/*"],
+      "js": [
+        "lib/browser-polyfill.js",
+        "lib/linkify.js",
+        "lib/linkify-element.js",
+        "kitsu/prettified.js",
+        "generic/prettified.js"
+      ]
+    },
+    {
+      "matches": ["*://myanimelist.net/ownlist/*"],
+      "js": [
+        "lib/browser-polyfill.js",
+        "lib/linkify.js",
+        "lib/linkify-element.js",
+        "mal/prettified.js",
+        "generic/prettified.js"
+      ],
+      "all_frames": true
+    }
+  ]
 }
