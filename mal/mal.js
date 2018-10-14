@@ -52,10 +52,6 @@ const handleMAL = (tab, urlData, options) => {
 							console.log("running polyfill");
 							await browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
 
-							console.log("running linkify");
-							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify.js" });
-							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify-element.js" });
-
 							console.log("running generics");
 							await browser.tabs.executeScript(tabId, { "file": "./generic/generic.js" });
 
@@ -67,7 +63,7 @@ const handleMAL = (tab, urlData, options) => {
 								"id": "sourceadder",
 								"taburl": tab.url,
 								"type": urlData.type,
-								"options": { "prettifyCommentsBox": options.prettifyCommentsBox },
+								"options": { "priority": options.priority },
 							});
 
 							console.log("scriptRun val", scriptRun);

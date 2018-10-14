@@ -23,6 +23,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
 			}
 			console.log("text added");
 
+			let wasntstarted = false;
 			const status = document.querySelector(`#add_${message.type}_status`);
 			console.log(status);
 			console.log(status.id);
@@ -38,6 +39,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
 					if (haventstarted.includes(document.querySelector("#add_anime_num_watched_episodes").value)) {
 						status.value = 6;
 						console.log("status changed");
+
+						wasntstarted = true;
 					}
 					break;
 				case "manga":
@@ -45,11 +48,30 @@ browser.runtime.onMessage.addListener((message, sender) => {
 						&& haventstarted.includes(document.querySelector("#add_manga_num_read_chapters").value)) {
 						status.value = 6;
 						console.log("status changed");
+
+						wasntstarted = true;
 					}
 					break;
 				default:
 					console.log("message.type is unknown", message.type);
 					return Promise.resolve(false);
+				}
+			}
+
+			const priority = document.querySelector(`#add_${message.type}_priority`);
+			console.log(priority);
+			// only override if the value is the default of low and wasn't started
+			if (priority.value === "0" && wasntstarted) {
+				console.log("priority is low");
+				switch (message.options.priority) {
+				case "medium":
+					priority.value = 1;
+					break;
+				case "high":
+					priority.value = 2;
+					break;
+				default:
+					priority.value = 1;
 				}
 			}
 

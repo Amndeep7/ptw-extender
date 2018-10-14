@@ -120,6 +120,7 @@ browser.contextMenus.removeAll()
 						"prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox,
 						"autosubmit": options.checkbox.mal_autosubmit,
 						"behaviorPostAutosubmit": options.radio.mal_behaviorPostAutosubmit,
+						"priority": options.radio.mal_priority,
 					}));
 				} else if (urlData && urlData.source === Sites.anilist) {
 					// eslint-disable-next-line no-undef

@@ -25,6 +25,7 @@ const optionsDefaults = {
 		},
 		"radio": {
 			"mal_behaviorPostAutosubmit": "titlePage",
+			"mal_priority": "low",
 		},
 	},
 };
