@@ -3,7 +3,7 @@
   "author": "Amndeep Singh Mann",
   "name": "PTW Extender",
   "version": "2.2.0",
-  "description": "Adds titles to your MyAnimeList or AniList plan-to-watch/read list with the url of where you found the title added as a comment.",
+  "description": "Adds titles to your MyAnimeList, AniList, or Kitsu plan-to-watch/read list with the url of where you found the title added as a comment.",
 
   "applications": {
     "gecko": {
