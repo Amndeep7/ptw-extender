@@ -14,6 +14,7 @@ const optionsDefaults = {
 			"anilist_anilist": true,
 			"anilist_private": false,
 			"anilist_hiddenFromStatusLists": false,
+			"kitsu_kitsu": true,
 			"kitsu_private": false,
 		},
 		"multipleCheckbox": {
