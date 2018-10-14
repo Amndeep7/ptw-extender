@@ -13,15 +13,25 @@ browser.runtime.onMessage.addListener((message, sender) => {
 			}
 			console.log("displaying advanced section");
 
+			const tags = document.querySelector(`#add_${message.type}_tags`);
+			if (tags.value.length === 0) {
+				tags.value = message.options.tags;
+			} else {
+				tags.value += `${"\n"}${message.options.tags}`;
+			}
+			console.log("tags added");
+
 			const comments = document.querySelector(`#add_${message.type}_comments`);
-			const comment = `${new Date().toLocaleString()} -> ${message.taburl}`;
+			// eslint-disable-next-line no-undef
+			const comment = `${generateNote(message.taburl)}`;
 			if (comments.value.length === 0) {
-				comments.value += `${""}${comment}`;
+				comments.value = comment;
 			} else {
 				comments.value += `${"\n"}${comment}`;
 			}
 			console.log("text added");
 
+			let wasntstarted = false;
 			const status = document.querySelector(`#add_${message.type}_status`);
 			console.log(status);
 			console.log(status.id);
@@ -37,6 +47,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
 					if (haventstarted.includes(document.querySelector("#add_anime_num_watched_episodes").value)) {
 						status.value = 6;
 						console.log("status changed");
+
+						wasntstarted = true;
 					}
 					break;
 				case "manga":
@@ -44,6 +56,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
 						&& haventstarted.includes(document.querySelector("#add_manga_num_read_chapters").value)) {
 						status.value = 6;
 						console.log("status changed");
+
+						wasntstarted = true;
 					}
 					break;
 				default:
@@ -52,20 +66,26 @@ browser.runtime.onMessage.addListener((message, sender) => {
 				}
 			}
 
-			if (message.options.prettifyCommentsBox) {
-				// eslint-disable-next-line no-undef
-				const linkifiedComments = linkifyHtml(`<div id="linkified_comments" class="inputtext"><p>${
-					comments.value.split("\n").join(" <br /> ")}</p></div>`);
-				comments.insertAdjacentHTML("beforebegin", linkifiedComments);
-				comments.addEventListener("input", () => {
-					// eslint-disable-next-line no-undef
-					document.querySelector("#linkified_comments p").innerHTML = linkifyHtml(comments.value.split("\n")
-						.join(" <br /> "));
-				});
-				console.log("created prettified comment area");
+			const priority = document.querySelector(`#add_${message.type}_priority`);
+			console.log(priority);
+			// only override if the value is the default of low and wasn't started
+			if (priority.value === "0" && wasntstarted) {
+				console.log("priority is low");
+				switch (message.options.priority) {
+				case "medium":
+					priority.value = 1;
+					break;
+				case "high":
+					priority.value = 2;
+					break;
+				default:
+					priority.value = 1;
+				}
 			}
 
-			return Promise.resolve(true);
+			const title = document.querySelectorAll("#main-form > table > tbody > tr")[0].children[1]
+				.textContent.trim();
+			return Promise.resolve(title);
 		}
 	}
 	return Promise.resolve(false);

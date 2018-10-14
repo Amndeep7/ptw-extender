@@ -16,4 +16,13 @@ echo "Copying libraries into /lib"
 mkdir -p lib/
 cp node_modules/webextension-polyfill/dist/browser-polyfill.js lib/
 cp node_modules/linkifyjs/dist/linkify.js lib/
-cp node_modules/linkifyjs/dist/linkify-html.js lib/
+cp node_modules/linkifyjs/dist/linkify-element.js lib/
+cp node_modules/showdown/dist/showdown.js lib/
+cp node_modules/dompurify/dist/purify.js lib/
+
+echo "'Compiling' readme"
+cat readme/readme.md > README.md
+echo >> README.md
+echo "----" >> README.md
+echo >> README.md
+cat readme/permissions_explanation.md >> README.md

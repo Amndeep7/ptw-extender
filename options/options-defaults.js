@@ -11,12 +11,49 @@ const optionsDefaults = {
 			"extension_prettifyCommentsBox": true,
 			"mal_mal": true,
 			"mal_autosubmit": false,
+			"anilist_anilist": true,
+			"anilist_private": false,
+			"anilist_hiddenFromStatusLists": false,
+			"kitsu_kitsu": true,
+			"kitsu_private": false,
+		},
+		"multipleCheckbox": {
+			// objects should consist of key/value pairs of the form value:checked
+			// empty objects are to be replaced by values acquired from the user
+			"anilist_customListsAnime": {},
+			"anilist_customListsManga": {},
 		},
 		"radio": {
 			"mal_behaviorPostAutosubmit": "titlePage",
+			"mal_priority": "low",
+		},
+		"textarea": {
+			"mal_tags": "",
 		},
 	},
 };
+
+const optionsDefaultsLocal = {
+	"v1": {
+		"authentication": {
+			"anilist": {
+				"clientId_firefox": 1124,
+				"clientId_chrome": 1125,
+				"accessToken": null,
+			},
+			"kitsu": {
+				"accessToken": null,
+			},
+		},
+		"browser": {
+			"type": browser.runtime.getBrowserInfo === undefined ? "chrome" : "firefox",
+		},
+	},
+};
+
+// now that optionsVersion is here, doesn't need to be passed along in all the places its being used so yee
+// eslint-disable-next-line no-unused-vars
+const optionsVersion = "v1";
 
 (async () => {
 	console.log("options being set");
@@ -26,8 +63,17 @@ const optionsDefaults = {
 		options = await browser.storage.sync.get(optionsDefaults);
 		await browser.storage.sync.set(options);
 	} catch (e) {
-		console.log("error while restoring while in listener", e);
-		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged options";
+		console.log("error while restoring from sync defaults", e);
+		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged sync options";
+		throw e;
+	}
+
+	try {
+		options = await browser.storage.local.get(optionsDefaultsLocal);
+		await browser.storage.local.set(options);
+	} catch (e) {
+		console.log("error while restoring from local defaults", e);
+		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged local options";
 		throw e;
 	}
 })();

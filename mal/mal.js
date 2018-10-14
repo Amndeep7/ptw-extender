@@ -52,9 +52,8 @@ const handleMAL = (tab, urlData, options) => {
 							console.log("running polyfill");
 							await browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
 
-							console.log("running linkify");
-							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify.js" });
-							await browser.tabs.executeScript(tabId, { "file": "./lib/linkify-html.js" });
+							console.log("running generics");
+							await browser.tabs.executeScript(tabId, { "file": "./generic/generic.js" });
 
 							console.log("running sourceadder");
 							await browser.tabs.executeScript(tabId, { "file": "./mal/sourceadder.js" });
@@ -64,7 +63,7 @@ const handleMAL = (tab, urlData, options) => {
 								"id": "sourceadder",
 								"taburl": tab.url,
 								"type": urlData.type,
-								"options": { "prettifyCommentsBox": options.prettifyCommentsBox },
+								"options": { "priority": options.priority, "tags": options.tags },
 							});
 
 							console.log("scriptRun val", scriptRun);
@@ -137,7 +136,7 @@ const handleMAL = (tab, urlData, options) => {
 		const refreshRate = 50;
 		(function waiting() {
 			if (urlChanged === true) {
-				if (scriptRun === true) {
+				if (scriptRun) {
 					return resolve();
 				}
 				if (scriptRun === false) {
@@ -167,7 +166,7 @@ const handleMAL = (tab, urlData, options) => {
 			promisedTabHandlerGenerator(variation)(maltab);
 			console.log("waiting");
 			await waitingOnURLChangeResult(10000);
-			return { "title": "Success", "message": "Added title to your MAL PTW list" };
+			return { "title": "Success", "message": `Added ${scriptRun} to your MAL PTW list` };
 		} catch (e) {
 			console.log("Creating MAL tab", variation, "failed due to err:", e);
 			return catchFunc();

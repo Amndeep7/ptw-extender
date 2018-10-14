@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "author": "Amndeep Singh Mann",
   "name": "PTW Extender",
-  "version": "2.1.1",
-  "description": "Adds titles to your MyAnimeList's plan-to-watch/read list with the url of where you found the title added as a comment.",
+  "version": "2.2.0",
+  "description": "Adds titles to your MyAnimeList, AniList, or Kitsu plan-to-watch/read list with the url of where you found the title added as a comment.",
 
   "applications": {
     "gecko": {
@@ -23,6 +23,7 @@
   "permissions": [
     "https://myanimelist.net/*",
     "contextMenus",
+    "identity",
     "notifications",
     "storage",
     "tabs",
@@ -33,7 +34,11 @@
     "scripts": [
       "lib/browser-polyfill.js",
       "options/options-defaults.js",
+      "generic/generic.js",
       "mal/mal.js",
+      "anilist/query.js",
+      "anilist/anilist.js",
+      "kitsu/kitsu.js",
       "menu.js"
     ],
     "persistent": false
@@ -42,5 +47,39 @@
   "options_ui": {
     "page": "options/options.html",
     "open_in_tab": true
-  }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://anilist.co/*"],
+      "js": [
+        "lib/browser-polyfill.js",
+        "lib/linkify.js",
+        "lib/linkify-element.js",
+        "anilist/prettified.js",
+        "generic/prettified.js"
+      ]
+    },
+    {
+      "matches": ["*://kitsu.io/*"],
+      "js": [
+        "lib/browser-polyfill.js",
+        "lib/linkify.js",
+        "lib/linkify-element.js",
+        "kitsu/prettified.js",
+        "generic/prettified.js"
+      ]
+    },
+    {
+      "matches": ["*://myanimelist.net/ownlist/*"],
+      "js": [
+        "lib/browser-polyfill.js",
+        "lib/linkify.js",
+        "lib/linkify-element.js",
+        "mal/prettified.js",
+        "generic/prettified.js"
+      ],
+      "all_frames": true
+    }
+  ]
 }
