@@ -59,10 +59,11 @@ let optionsLock = true;
 (async () => {
 	console.log("options being set");
 	// make sure the defaults are assigned, but don't override any changed settings
-	let options = null;
 	try {
-		options = await browser.storage.sync.get(optionsDefaults);
-		await browser.storage.sync.set(options);
+		const options = await browser.storage.sync.get();
+		// eslint-disable-next-line no-undef
+		const merged = deepmerge(optionsDefaults, options);
+		await browser.storage.sync.set(merged);
 	} catch (e) {
 		console.log("error while restoring from sync defaults", e);
 		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged sync options";
@@ -70,8 +71,10 @@ let optionsLock = true;
 	}
 
 	try {
-		options = await browser.storage.local.get(optionsDefaultsLocal);
-		await browser.storage.local.set(options);
+		const options = await browser.storage.local.get();
+		// eslint-disable-next-line no-undef
+		const merged = deepmerge(optionsDefaultsLocal, options);
+		await browser.storage.local.set(merged);
 	} catch (e) {
 		console.log("error while restoring from local defaults", e);
 		document.querySelector("#results").innerHTML = "Didn't successfully assign default/unchanged local options";
