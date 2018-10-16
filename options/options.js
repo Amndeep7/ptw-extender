@@ -228,9 +228,9 @@ const setupSavingAniListLoginButton = (postAuthentication) => {
 				event.target.value = "Logout of AniList";
 
 				// eslint-disable-next-line no-undef
-				const clientId = options[optionsVersion].authentication
+				const clientId = extensionConstants[extensionConstantsVersion].authentication
 					// eslint-disable-next-line no-undef
-					.anilist[`clientId_${options[optionsVersion].browser.type}`];
+					.anilist[`clientId_${extensionConstants[extensionConstantsVersion].browser.type}`];
 				const redirectRequestUrl = "https://anilist.co/api/v2/oauth/authorize?response_type=token&"
 					+ `client_id=${clientId}`;
 				let redirectUrl = null;
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 
 		// eslint-disable-next-line no-undef
-		const reviewLoc = options[optionsVersion].browser.type === "firefox"
+		const reviewLoc = extensionConstants[extensionConstantsVersion].browser.type === "firefox"
 			? "https://addons.mozilla.org/en-US/firefox/addon/ptw-extender/"
 			: "https://chrome.google.com/webstore/detail/ptw-extender/cbllkljhggikogmnnfiihcbgenkmjanh/reviews";
 		document.querySelector("#review").setAttribute("href", reviewLoc);

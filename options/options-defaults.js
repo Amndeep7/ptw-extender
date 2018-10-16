@@ -37,12 +37,25 @@ const optionsDefaultsLocal = {
 	"v1": {
 		"authentication": {
 			"anilist": {
-				"clientId_firefox": 1124,
-				"clientId_chrome": 1125,
 				"accessToken": null,
 			},
 			"kitsu": {
 				"accessToken": null,
+			},
+		},
+	},
+};
+
+// eslint-disable-next-line no-unused-vars
+const optionsVersion = "v1";
+
+// eslint-disable-next-line no-unused-vars
+const extensionConstants = {
+	"v1": {
+		"authentication": {
+			"anilist": {
+				"clientId_firefox": 1124,
+				"clientId_chrome": 1125,
 			},
 		},
 		"browser": {
@@ -52,7 +65,7 @@ const optionsDefaultsLocal = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const optionsVersion = "v1";
+const extensionConstantsVersion = "v1";
 
 // eslint-disable-next-line no-unused-vars
 let optionsLock = true;
