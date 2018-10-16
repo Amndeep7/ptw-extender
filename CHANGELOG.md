@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [2.2.3] - 2018-10-15
+#### Changed
+- Extension constants are now separated out from user settings
+#### Fixed
+- Documentation now matches Chrome add-on store specifications
+- AniList login now works properly after failing due to a mismatch between the redirecturl it generates and the one stored in AniList's client db
+
 ### [2.2.2] - 2018-10-14
 #### Fixed
 - User customized settings no longer completely overwrite defaults (which may include options that the user defined settings haven't seen yet)
