@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "author": "Amndeep Singh Mann",
   "name": "PTW Extender",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "description": "Adds titles to your MyAnimeList, AniList, or Kitsu plan-to-watch/read list with the url of where you found it added as a comment.",
 
   "applications": {
