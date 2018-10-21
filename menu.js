@@ -3,6 +3,10 @@
 const menuId = "ptw";
 console.log("removing context menus");
 browser.contextMenus.removeAll()
+	.catch((e) => {
+		console.log("error while deleting context menus", e);
+		throw e;
+	})
 	.then(() => {
 		console.log("creating context menu");
 		browser.contextMenus.create({
@@ -10,10 +14,6 @@ browser.contextMenus.removeAll()
 			"title": "Add to PTW list",
 			"contexts": ["link"],
 		});
-	})
-	.catch((e) => {
-		console.log("error while deleting context menus", e);
-		throw e;
 	})
 	.then(async () => {
 		const intervalId = setInterval(async () => {
