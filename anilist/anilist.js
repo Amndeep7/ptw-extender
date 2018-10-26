@@ -132,15 +132,15 @@ const handleAniList = async (tab, urlData, options) => {
 	} catch (e) {
 		console.log("Unsuccessfully made request", e);
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your AniList PTW list - is your internet working?",
+			"title": "AniList Failure",
+			"message": "Is your internet working?",
 		};
 	}
 
 	if (errors) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your AniList PTW list - did you authenticate yourself?",
+			"title": "AniList Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
@@ -177,18 +177,18 @@ const handleAniList = async (tab, urlData, options) => {
 	} catch (e) {
 		console.log("Unsuccessfully made request", e);
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your AniList PTW list - is your internet working?",
+			"title": "AniList Failure",
+			"message": "Is your internet working?",
 		};
 	}
 
 	if (errors) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your AniList PTW list - did you authenticate yourself?",
+			"title": "AniList Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
 	console.log("Successfully made requests");
-	return { "title": "Success", "message": `Added ${title} to your AniList PTW list` };
+	return { "title": "AniList Success", "message": `Added ${title}` };
 };

@@ -101,8 +101,8 @@ const matchOnMALFromKitsu = async (urlData) => {
 const handleKitsu = async (tab, urlData, options) => {
 	if (options.accessToken === null) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - did you authenticate yourself?",
+			"title": "Kitsu Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
@@ -115,15 +115,15 @@ const handleKitsu = async (tab, urlData, options) => {
 	} catch (e) {
 		console.log("Unsuccessfully made request", e);
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - is your internet working?",
+			"title": "Kitsu Failure",
+			"message": "Is your internet working?",
 		};
 	}
 
 	if (errors) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - did you authenticate yourself?",
+			"title": "Kitsu Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
@@ -135,15 +135,15 @@ const handleKitsu = async (tab, urlData, options) => {
 	} catch (e) {
 		console.log("Unsuccessfully made request", e);
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - is your internet working?",
+			"title": "Kitsu Failure",
+			"message": "Is your internet working?",
 		};
 	}
 
 	if (errors) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - did you authenticate yourself?",
+			"title": "Kitsu Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
@@ -155,15 +155,15 @@ const handleKitsu = async (tab, urlData, options) => {
 	} catch (e) {
 		console.log("Unsuccessfully made request", e);
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - is your internet working?",
+			"title": "Kitsu Failure",
+			"message": "Is your internet working?",
 		};
 	}
 
 	if (errors) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - did you authenticate yourself?",
+			"title": "Kitsu Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
@@ -222,18 +222,18 @@ const handleKitsu = async (tab, urlData, options) => {
 	} catch (e) {
 		console.log("Unsuccessfully made request", e);
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - is your internet working?",
+			"title": "Kitsu Failure",
+			"message": "Is your internet working?",
 		};
 	}
 
 	if (errors) {
 		return {
-			"title": "Failure",
-			"message": "Failed to add title to your Kitsu PTW list - did you authenticate yourself?",
+			"title": "Kitsu Failure",
+			"message": "Did you authenticate yourself?",
 		};
 	}
 
 	console.log("Successfully made requests");
-	return { "title": "Success", "message": `Added ${title} to your Kitsu PTW list` };
+	return { "title": "Kitsu Success", "message": `Added ${title}` };
 };

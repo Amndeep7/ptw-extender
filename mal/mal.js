@@ -166,7 +166,7 @@ const handleMAL = (tab, urlData, options) => {
 			promisedTabHandlerGenerator(variation)(maltab);
 			console.log("waiting");
 			await waitingOnURLChangeResult(10000);
-			return { "title": "Success", "message": `Added ${scriptRun} to your MAL PTW list` };
+			return { "title": "MAL Success", "message": `Added ${scriptRun}` };
 		} catch (e) {
 			console.log("Creating MAL tab", variation, "failed due to err:", e);
 			return catchFunc();
@@ -176,6 +176,6 @@ const handleMAL = (tab, urlData, options) => {
 	return createMALTab(generatedURL.add,
 		createMALTab(generatedURL.edit, () => {
 			console.log("Probably need to log into MAL");
-			return { "title": "Failure", "message": "Failed to add title to your MAL PTW list - are you logged in?" };
+			return { "title": "MAL Failure", "message": "Are you logged in?" };
 		}))();
 };
