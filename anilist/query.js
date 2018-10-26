@@ -6,11 +6,13 @@ const sendAniListQuery = async (accessToken, query) => {
 	const urlOptions = {
 		"method": "POST",
 		"headers": {
-			"Authorization": `Bearer ${accessToken}`,
 			"Content-Type": "application/json",
 			"Accept": "application/json",
 		},
 	};
+	if (accessToken) {
+		urlOptions.headers.Authorization = `Bearer ${accessToken}`;
+	}
 	urlOptions.body = JSON.stringify(query);
 
 	const retrieve = await fetch(url, urlOptions);

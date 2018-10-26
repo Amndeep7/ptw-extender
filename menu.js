@@ -70,29 +70,28 @@ browser.contextMenus.removeAll()
 				}
 			});
 
-			const Sites = Object.freeze({
-				"mal": Symbol("MyAnimeList"),
-				"anilist": Symbol("AniList"),
-				"kitsu": Symbol("Kitsu"),
-			});
-
-			const validateAndMineURL = (url, notIgnoring) => {
-				const matchFuncs = {
-					"mal": matchOnMAL, // eslint-disable-line no-undef
-					"anilist": matchOnAniList, // eslint-disable-line no-undef
-					"kitsu": matchOnKitsu, // eslint-disable-line no-undef
-				};
-
-				// eslint-disable-next-line no-restricted-syntax
-				for (const site of Object.keys(matchFuncs)) {
-					const match = matchFuncs[site](url);
-					if (match) {
-						match.source = Sites[site];
-						match.notIgnoring = notIgnoring[site];
-						return match;
-					}
+			const validateAndMineURL = async (url) => {
+				let match = matchOnMAL(url); // eslint-disable-line no-undef
+				if (match) {
+					const urlData = { "mal": match };
+					urlData.anilist = await matchOnAniListFromMAL(urlData.mal); // eslint-disable-line no-undef
+					urlData.kitsu = await matchOnKitsuFromMAL(urlData.mal); // eslint-disable-line no-undef
+					return urlData;
 				}
-
+				match = matchOnAniList(url); // eslint-disable-line no-undef
+				if (match) {
+					const urlData = { "anilist": match };
+					urlData.mal = await matchOnMALFromAniList(urlData.anilist); // eslint-disable-line no-undef
+					urlData.kitsu = await matchOnKitsuFromMAL(urlData.mal); // eslint-disable-line no-undef
+					return urlData;
+				}
+				match = matchOnKitsu(url); // eslint-disable-line no-undef
+				if (match) {
+					const urlData = { "kitsu": match };
+					urlData.mal = await matchOnMALFromKitsu(urlData.kitsu); // eslint-disable-line no-undef
+					urlData.anilist = await matchOnAniListFromMAL(urlData.mal); // eslint-disable-line no-undef
+					return urlData;
+				}
 				return false;
 			};
 
@@ -114,43 +113,45 @@ browser.contextMenus.removeAll()
 				}
 				console.log(`Link URL: ${info.linkUrl}`);
 				console.log(`Tab URL: ${tab.url}`);
-				const notIgnoring = {
-					"mal": options.checkbox.mal_mal,
-					"anilist": options.checkbox.anilist_anilist,
-					"kitsu": options.checkbox.kitsu_kitsu,
-				};
-				const urlData = validateAndMineURL(info.linkUrl, notIgnoring);
-				if (urlData && !urlData.notIgnoring) {
-					console.log("Match ignored");
-					createNotification({
-						"title": "Ignoring list site",
-						"message": `PTW Extender is currently set to ignore ${urlData.source
-							.toString().slice(7, -1)}`,
-					});
-				} else if (urlData && urlData.source === Sites.mal) {
-					// eslint-disable-next-line no-undef
-					createNotification(await handleMAL(tab, urlData, {
-						"prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox,
-						"autosubmit": options.checkbox.mal_autosubmit,
-						"behaviorPostAutosubmit": options.radio.mal_behaviorPostAutosubmit,
-						"priority": options.radio.mal_priority,
-						"tags": options.textarea.mal_tags,
-					}));
-				} else if (urlData && urlData.source === Sites.anilist) {
-					// eslint-disable-next-line no-undef
-					createNotification(await handleAniList(tab, urlData, {
-						"accessToken": optionsLocal.authentication.anilist.accessToken,
-						"private": options.checkbox.anilist_private,
-						"hiddenFromStatusLists": options.checkbox.anilist_hiddenFromStatusLists,
-						"customListsAnime": options.multipleCheckbox.anilist_customListsAnime,
-						"customListsManga": options.multipleCheckbox.anilist_customListsManga,
-					}));
-				} else if (urlData && urlData.source === Sites.kitsu) {
-					// eslint-disable-next-line no-undef
-					createNotification(await handleKitsu(tab, urlData, {
-						"accessToken": optionsLocal.authentication.kitsu.accessToken,
-						"private": options.checkbox.kitsu_private,
-					}));
+				const urlData = await validateAndMineURL(info.linkUrl);
+				if (urlData) {
+					const notIgnoring = {
+						"mal": options.checkbox.mal_mal,
+						"anilist": options.checkbox.anilist_anilist,
+						"kitsu": options.checkbox.kitsu_kitsu,
+					};
+					let message = "";
+					if (urlData.mal && notIgnoring.mal) {
+						// eslint-disable-next-line no-undef
+						const handled = await handleMAL(tab, urlData.mal, {
+							"prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox,
+							"autosubmit": options.checkbox.mal_autosubmit,
+							"behaviorPostAutosubmit": options.radio.mal_behaviorPostAutosubmit,
+							"priority": options.radio.mal_priority,
+							"tags": options.textarea.mal_tags,
+						});
+						message = message.concat(handled.title, ": ", handled.message, "\n");
+					}
+					if (urlData.anilist && notIgnoring.anilist) {
+						// eslint-disable-next-line no-undef
+						const handled = await handleAniList(tab, urlData.anilist, {
+							"accessToken": optionsLocal.authentication.anilist.accessToken,
+							"private": options.checkbox.anilist_private,
+							"hiddenFromStatusLists": options.checkbox.anilist_hiddenFromStatusLists,
+							"customListsAnime": options.multipleCheckbox.anilist_customListsAnime,
+							"customListsManga": options.multipleCheckbox.anilist_customListsManga,
+						});
+						message = message.concat(handled.title, ": ", handled.message, "\n");
+					}
+					if (urlData.kitsu && notIgnoring.kitsu) {
+						// eslint-disable-next-line no-undef
+						const handled = await handleKitsu(tab, urlData.kitsu, {
+							"accessToken": optionsLocal.authentication.kitsu.accessToken,
+							"private": options.checkbox.kitsu_private,
+						});
+						message = message.concat(handled.title, ": ", handled.message, "\n");
+					}
+					createNotification({ "title": "PTW extending results", "message": message });
 				} else {
 					console.log("Match fail");
 					createNotification({

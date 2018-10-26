@@ -16,6 +16,74 @@ const matchOnAniList = (url) => {
 };
 
 // eslint-disable-next-line no-unused-vars
+const matchOnAniListFromMAL = async (urlData) => {
+	const query = {
+		"query": `
+		query matchFromMAL($type: MediaType, $id: Int) {
+			Media(type: $type, idMal: $id) {
+				id
+				type
+			}
+		}`,
+		"variables": {
+			"type": urlData.type.toUpperCase(),
+			"id": urlData.id,
+		},
+		"operationName": "matchFromMAL",
+	};
+
+	let data = null;
+	let errors = null;
+	try {
+		// eslint-disable-next-line no-undef
+		[data, errors] = await sendAniListQuery(null, query);
+	} catch (e) {
+		console.log("Unsuccessfully made request", e);
+		return false;
+	}
+
+	if (errors) {
+		return false;
+	}
+
+	return { "type": data.Media.type, "id": data.Media.id };
+};
+
+// eslint-disable-next-line no-unused-vars
+const matchOnMALFromAniList = async (urlData) => {
+	const query = {
+		"query": `
+		query matchOnMAL($type: MediaType, $id: Int) {
+			Media(type: $type, id: $id) {
+				idMal
+				type
+			}
+		}`,
+		"variables": {
+			"type": urlData.type.toUpperCase(),
+			"id": urlData.id,
+		},
+		"operationName": "matchOnMAL",
+	};
+
+	let data = null;
+	let errors = null;
+	try {
+		// eslint-disable-next-line no-undef
+		[data, errors] = await sendAniListQuery(null, query);
+	} catch (e) {
+		console.log("Unsuccessfully made request", e);
+		return false;
+	}
+
+	if (errors) {
+		return false;
+	}
+
+	return { "type": data.Media.type.toLowerCase(), "id": data.Media.idMal };
+};
+
+// eslint-disable-next-line no-unused-vars
 const handleAniList = async (tab, urlData, options) => {
 	const queryRetrieveNotes = {
 		"query": `

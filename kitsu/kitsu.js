@@ -1,30 +1,17 @@
 /* eslint no-console: "off" */
 
-// eslint-disable-next-line no-unused-vars
-const matchOnKitsu = (url) => {
-	const matchKitsu = url.match(/^https?:\/\/(?:www\.)?kitsu\.io\/(anime|manga)\/(.*)$/);
-	if (matchKitsu) {
-		const urlData = {
-			"type": matchKitsu[1],
-			"name": matchKitsu[2],
-		};
-		console.log("Kitsu match success");
-		console.log(`${urlData.type} ${urlData.name}`);
-		return urlData;
-	}
-	return false;
-};
-
 const sendKitsuQuery = async (accessToken, method, query, body) => {
-	const url = `https://kitsu.io/api/edge/${query}`;
+	const url = query.startsWith("https") ? query : `https://kitsu.io/api/edge/${query}`;
 	const urlOptions = {
 		"method": method,
 		"headers": {
-			"Authorization": `Bearer ${accessToken}`,
 			"Content-Type": "application/vnd.api+json",
 			"Accept": "application/vnd.api+json",
 		},
 	};
+	if (accessToken) {
+		urlOptions.headers.Authorization = `Bearer ${accessToken}`;
+	}
 	if (body) {
 		urlOptions.body = JSON.stringify(body);
 	}
@@ -41,6 +28,73 @@ const sendKitsuQuery = async (accessToken, method, query, body) => {
 	}
 
 	return [data, meta, errors];
+};
+
+// eslint-disable-next-line no-unused-vars
+const matchOnKitsu = (url) => {
+	const matchKitsu = url.match(/^https?:\/\/(?:www\.)?kitsu\.io\/(anime|manga)\/(.*)$/);
+	if (matchKitsu) {
+		const urlData = {
+			"type": matchKitsu[1],
+			"name": matchKitsu[2],
+		};
+		console.log("Kitsu match success");
+		console.log(`${urlData.type} ${urlData.name}`);
+		return urlData;
+	}
+	return false;
+};
+
+// eslint-disable-next-line no-unused-vars
+const matchOnKitsuFromMAL = async (urlData) => {
+	let data = null;
+	// eslint-disable-next-line no-unused-vars
+	let meta = null;
+	let errors = null;
+	try {
+		[data, meta, errors] = await sendKitsuQuery(null, "GET",
+			`mappings?filter[externalSite]=myanimelist/${urlData.type.toLowerCase()}&filter[externalId]=${urlData.id}`);
+		if (errors) {
+			return false;
+		}
+
+		[data, meta, errors] = await sendKitsuQuery(null, "GET", data[0].relationships.item.links.related);
+		if (errors) {
+			return false;
+		}
+
+		return { "type": data.type, "name": data.attributes.slug };
+	} catch (e) {
+		console.log("Unsuccessfully made request", e);
+		return false;
+	}
+};
+
+// eslint-disable-next-line no-unused-vars
+const matchOnMALFromKitsu = async (urlData) => {
+	let data = null;
+	// eslint-disable-next-line no-unused-vars
+	let meta = null;
+	let errors = null;
+
+	try {
+		[data, meta, errors] = await sendKitsuQuery(null, "GET", `${urlData.type}?filter[slug]=${urlData.name}`);
+		if (errors) {
+			return false;
+		}
+
+		[data, meta, errors] = await sendKitsuQuery(null, "GET", data[0].relationships.mappings.links.related);
+		if (errors) {
+			return false;
+		}
+
+		const mal = data.filter((mapping) => mapping.attributes.externalSite.startsWith("myanimelist"))[0];
+
+		return { "type": mal.attributes.externalSite.substring(12), "id": mal.attributes.externalId };
+	} catch (e) {
+		console.log("Unsuccessfully made request", e);
+		return false;
+	}
 };
 
 // eslint-disable-next-line no-unused-vars
