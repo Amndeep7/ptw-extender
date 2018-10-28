@@ -1,6 +1,8 @@
 /* eslint no-console: "off" */
 
-const menuId = "ptw";
+const ptwId = "ptw";
+const searchAnimeId = "searchAnime";
+const searchMangaId = "searchManga";
 console.log("removing context menus");
 browser.contextMenus.removeAll()
 	.catch((e) => {
@@ -10,9 +12,19 @@ browser.contextMenus.removeAll()
 	.then(() => {
 		console.log("creating context menu");
 		browser.contextMenus.create({
-			"id": menuId,
+			"id": ptwId,
 			"title": "Add to PTW list",
 			"contexts": ["link"],
+		});
+		browser.contextMenus.create({
+			"id": searchAnimeId,
+			"title": "Search to add anime to PTW list",
+			"contexts": ["selection"],
+		});
+		browser.contextMenus.create({
+			"id": searchMangaId,
+			"title": "Search to add manga to PTR list",
+			"contexts": ["selection"],
 		});
 	})
 	.then(async () => {
@@ -70,29 +82,51 @@ browser.contextMenus.removeAll()
 				}
 			});
 
-			const validateAndMineURL = async (url) => {
+			const validateAndMineURL = (url) => {
 				let match = matchOnMAL(url); // eslint-disable-line no-undef
 				if (match) {
-					const urlData = { "mal": match };
-					urlData.anilist = await matchOnAniListFromMAL(urlData.mal); // eslint-disable-line no-undef
-					urlData.kitsu = await matchOnKitsuFromMAL(urlData.mal); // eslint-disable-line no-undef
-					return urlData;
+					return { "mal": match };
 				}
 				match = matchOnAniList(url); // eslint-disable-line no-undef
 				if (match) {
-					const urlData = { "anilist": match };
-					urlData.mal = await matchOnMALFromAniList(urlData.anilist); // eslint-disable-line no-undef
-					urlData.kitsu = urlData.mal ? await matchOnKitsuFromMAL(urlData.mal) : false; // eslint-disable-line no-undef
-					return urlData;
+					return { "anilist": match };
 				}
 				match = matchOnKitsu(url); // eslint-disable-line no-undef
 				if (match) {
-					const urlData = { "kitsu": match };
+					return { "kitsu": match };
+				}
+				return false;
+			};
+
+			const searchForTitle = async (menuId, text) => {
+				if (menuId || text) {
+					return false;
+				}
+				return false;
+			};
+
+			const acquireUrlData = async (urlDatum) => {
+				if (!urlDatum) {
+					return false;
+				}
+
+				const urlData = urlDatum;
+				switch (Object.keys(urlData)[0]) {
+				case "mal":
+					urlData.anilist = await matchOnAniListFromMAL(urlData.mal); // eslint-disable-line no-undef
+					urlData.kitsu = await matchOnKitsuFromMAL(urlData.mal); // eslint-disable-line no-undef
+					return urlData;
+				case "anilist":
+					urlData.mal = await matchOnMALFromAniList(urlData.anilist); // eslint-disable-line no-undef
+					urlData.kitsu = urlData.mal ? await matchOnKitsuFromMAL(urlData.mal) : false; // eslint-disable-line no-undef
+					return urlData;
+				case "kitsu":
 					urlData.mal = await matchOnMALFromKitsu(urlData.kitsu); // eslint-disable-line no-undef
 					urlData.anilist = urlData.mal ? await matchOnAniListFromMAL(urlData.mal) : false; // eslint-disable-line no-undef
 					return urlData;
+				default:
+					return false;
 				}
-				return false;
 			};
 
 			const createNotification = async (notification) => {
@@ -108,12 +142,22 @@ browser.contextMenus.removeAll()
 
 			browser.contextMenus.onClicked.addListener(async (info, tab) => {
 				console.log("hello");
-				if (!([menuId].includes(info.menuItemId))) {
+				if (!([ptwId, searchAnimeId, searchMangaId].includes(info.menuItemId))) {
 					return;
 				}
-				console.log(`Link URL: ${info.linkUrl}`);
+
 				console.log(`Tab URL: ${tab.url}`);
-				const urlData = await validateAndMineURL(info.linkUrl);
+
+				let urlDatum = null;
+				if (ptwId === info.menuItemId) {
+					console.log(`Link URL: ${info.linkUrl}`);
+					urlDatum = validateAndMineURL(info.linkUrl);
+				} else {
+					console.log(`Selection text: ${info.selectionText}`);
+					urlDatum = await searchForTitle(info.menuItemId, info.selectionText);
+				}
+
+				const urlData = await acquireUrlData(urlDatum);
 				if (urlData) {
 					const notIgnoring = {
 						"mal": options.checkbox.mal_mal,
