@@ -4,6 +4,12 @@ A detailed explanation for why PTW Extender asks for these permissions.
 ### https://myanimelist.net/*
 As of the time of writing, MAL doesn't have an API, so in order to access, scrape, and modify the add/edit page, PTW Extender need permissions to view it.
 
+### https://anilist.co/* | https://kitsu.io/* | https://myanimelist.net/ownlist/*
+In order to have the prettified comments box show up, PTW Extender needs permission to create and display it on those pages.
+
+### activeTab
+In order to use the search capabilities, PTW Extender pops up a modal that confirms if the title it found was the one you wanted.  In order to create that modal, it needs permissions for the tab you're currently on, i.e. the active tab.
+
 ### contextMenus
 The way the extension is used is to right-click a link and then select PTW Extender's context menu button in order to add a title to your PTW list.
 

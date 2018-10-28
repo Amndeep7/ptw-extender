@@ -23,6 +23,7 @@
 
   "permissions": [
     "https://myanimelist.net/*",
+    "activeTab",
     "contextMenus",
     "identity",
     "notifications",
