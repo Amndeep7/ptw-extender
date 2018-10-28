@@ -140,7 +140,7 @@ const handleAniList = async (tab, urlData, options) => {
 	if (errors) {
 		return {
 			"title": "AniList Failure",
-			"message": "Did you authenticate yourself?",
+			"message": errors[0].message,
 		};
 	}
 
@@ -185,7 +185,7 @@ const handleAniList = async (tab, urlData, options) => {
 	if (errors) {
 		return {
 			"title": "AniList Failure",
-			"message": "Did you authenticate yourself?",
+			"message": errors[0].message,
 		};
 	}
 

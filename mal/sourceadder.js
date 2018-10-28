@@ -83,10 +83,14 @@ browser.runtime.onMessage.addListener((message, sender) => {
 				}
 			}
 
-			const title = document.querySelectorAll("#main-form > table > tbody > tr")[0].children[1]
+			const badresult = document.querySelector(".badresult");
+			if (badresult) {
+				return Promise.resolve([false, true, "Title not found"]);
+			}
+			const title = document.querySelector("#main-form > table > tbody > tr").children[1]
 				.textContent.trim();
-			return Promise.resolve(title);
+			return Promise.resolve([true, title]);
 		}
 	}
-	return Promise.resolve(false);
+	return Promise.resolve([false, false, "Not the right page - are you logged in?"]);
 });

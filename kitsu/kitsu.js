@@ -48,13 +48,12 @@ const matchOnKitsu = (url) => {
 // eslint-disable-next-line no-unused-vars
 const matchOnKitsuFromMAL = async (urlData) => {
 	let data = null;
-	// eslint-disable-next-line no-unused-vars
 	let meta = null;
 	let errors = null;
 	try {
 		[data, meta, errors] = await sendKitsuQuery(null, "GET",
 			`mappings?filter[externalSite]=myanimelist/${urlData.type.toLowerCase()}&filter[externalId]=${urlData.id}`);
-		if (errors) {
+		if (errors || meta.count === 0) {
 			return false;
 		}
 
@@ -73,13 +72,12 @@ const matchOnKitsuFromMAL = async (urlData) => {
 // eslint-disable-next-line no-unused-vars
 const matchOnMALFromKitsu = async (urlData) => {
 	let data = null;
-	// eslint-disable-next-line no-unused-vars
 	let meta = null;
 	let errors = null;
 
 	try {
 		[data, meta, errors] = await sendKitsuQuery(null, "GET", `${urlData.type}?filter[slug]=${urlData.name}`);
-		if (errors) {
+		if (errors || meta.count === 0) {
 			return false;
 		}
 
@@ -120,10 +118,10 @@ const handleKitsu = async (tab, urlData, options) => {
 		};
 	}
 
-	if (errors) {
+	if (errors || meta.count === 0) {
 		return {
 			"title": "Kitsu Failure",
-			"message": "Did you authenticate yourself?",
+			"message": "Title not found",
 		};
 	}
 
@@ -143,7 +141,7 @@ const handleKitsu = async (tab, urlData, options) => {
 	if (errors) {
 		return {
 			"title": "Kitsu Failure",
-			"message": "Did you authenticate yourself?",
+			"message": "Something's gone wrong",
 		};
 	}
 
@@ -163,7 +161,7 @@ const handleKitsu = async (tab, urlData, options) => {
 	if (errors) {
 		return {
 			"title": "Kitsu Failure",
-			"message": "Did you authenticate yourself?",
+			"message": "Something's gone wrong",
 		};
 	}
 
@@ -230,7 +228,7 @@ const handleKitsu = async (tab, urlData, options) => {
 	if (errors) {
 		return {
 			"title": "Kitsu Failure",
-			"message": "Did you authenticate yourself?",
+			"message": "Something's gone wrong",
 		};
 	}
 

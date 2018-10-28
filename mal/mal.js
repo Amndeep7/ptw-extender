@@ -67,7 +67,7 @@ const handleMAL = (tab, urlData, options) => {
 							});
 
 							console.log("scriptRun val", scriptRun);
-							if (!scriptRun) {
+							if (scriptRun && !scriptRun[0]) {
 								removeTab();
 							} else if (options.autosubmit) {
 								console.log("auto press submit");
@@ -137,16 +137,21 @@ const handleMAL = (tab, urlData, options) => {
 		(function waiting() {
 			if (urlChanged === true) {
 				if (scriptRun) {
-					return resolve();
-				}
-				if (scriptRun === false) {
-					scriptRun = null;
-					return reject();
+					if (scriptRun[0]) {
+						return resolve();
+					}
+					if (scriptRun[0] === false) {
+						const error = new Error(scriptRun[2]);
+						// eslint-disable-next-line prefer-destructuring
+						error.hasPriority = scriptRun[1]; // eslint not parsing this line right where I'm adding a property
+						scriptRun = null;
+						return reject(error);
+					}
 				}
 			}
 			if (urlChanged === false) {
 				urlChanged = null;
-				return reject();
+				return reject(new Error("Something went wrong - are you logged in?"));
 			}
 			timeOut -= refreshRate;
 			if (timeOut < 0) {
@@ -166,16 +171,19 @@ const handleMAL = (tab, urlData, options) => {
 			promisedTabHandlerGenerator(variation)(maltab);
 			console.log("waiting");
 			await waitingOnURLChangeResult(10000);
-			return { "title": "MAL Success", "message": `Added ${scriptRun}` };
+			return { "title": "MAL Success", "message": `Added ${scriptRun[1]}` };
 		} catch (e) {
 			console.log("Creating MAL tab", variation, "failed due to err:", e);
-			return catchFunc();
+			if (e.hasPriority) {
+				return { "title": "MAL Failure", "message": e.message };
+			}
+			return catchFunc(e);
 		}
 	};
 
 	return createMALTab(generatedURL.add,
-		createMALTab(generatedURL.edit, () => {
-			console.log("Probably need to log into MAL");
-			return { "title": "MAL Failure", "message": "Are you logged in?" };
+		createMALTab(generatedURL.edit, (error) => {
+			console.log("Error with mal");
+			return { "title": "MAL Failure", "message": error.message };
 		}))();
 };

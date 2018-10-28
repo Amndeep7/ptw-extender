@@ -82,22 +82,22 @@ browser.contextMenus.removeAll()
 				if (match) {
 					const urlData = { "anilist": match };
 					urlData.mal = await matchOnMALFromAniList(urlData.anilist); // eslint-disable-line no-undef
-					urlData.kitsu = await matchOnKitsuFromMAL(urlData.mal); // eslint-disable-line no-undef
+					urlData.kitsu = urlData.mal ? await matchOnKitsuFromMAL(urlData.mal) : false; // eslint-disable-line no-undef
 					return urlData;
 				}
 				match = matchOnKitsu(url); // eslint-disable-line no-undef
 				if (match) {
 					const urlData = { "kitsu": match };
 					urlData.mal = await matchOnMALFromKitsu(urlData.kitsu); // eslint-disable-line no-undef
-					urlData.anilist = await matchOnAniListFromMAL(urlData.mal); // eslint-disable-line no-undef
+					urlData.anilist = urlData.mal ? await matchOnAniListFromMAL(urlData.mal) : false; // eslint-disable-line no-undef
 					return urlData;
 				}
 				return false;
 			};
 
-			const createNotification = (notification) => {
+			const createNotification = async (notification) => {
 				if (options.checkbox.extension_displayNotifications) {
-					browser.notifications.create({
+					await browser.notifications.create({
 						"type": "basic",
 						"iconUrl": browser.extension.getURL("./icons/icon_48.png"),
 						"title": notification.title,
