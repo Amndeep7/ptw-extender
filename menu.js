@@ -120,8 +120,14 @@ browser.contextMenus.removeAll()
 						"anilist": options.checkbox.anilist_anilist,
 						"kitsu": options.checkbox.kitsu_kitsu,
 					};
+
 					let message = "";
-					if (urlData.mal && notIgnoring.mal) {
+
+					if (!notIgnoring.mal) {
+						message = message.concat("MAL Ignored: Turned off\n");
+					} else if (!urlData.mal) {
+						message = message.concat("MAL Failure: Title not found\n");
+					} else {
 						// eslint-disable-next-line no-undef
 						const handled = await handleMAL(tab, urlData.mal, {
 							"prettifyCommentsBox": options.checkbox.extension_prettifyCommentsBox,
@@ -132,7 +138,11 @@ browser.contextMenus.removeAll()
 						});
 						message = message.concat(handled.title, ": ", handled.message, "\n");
 					}
-					if (urlData.anilist && notIgnoring.anilist) {
+					if (!notIgnoring.anilist) {
+						message = message.concat("AniList Ignored: Turned off\n");
+					} else if (!urlData.anilist) {
+						message = message.concat("AniList Failure: Title not found\n");
+					} else {
 						// eslint-disable-next-line no-undef
 						const handled = await handleAniList(tab, urlData.anilist, {
 							"accessToken": optionsLocal.authentication.anilist.accessToken,
@@ -143,7 +153,11 @@ browser.contextMenus.removeAll()
 						});
 						message = message.concat(handled.title, ": ", handled.message, "\n");
 					}
-					if (urlData.kitsu && notIgnoring.kitsu) {
+					if (!notIgnoring.kitsu) {
+						message = message.concat("Kitsu Ignored: Turned off\n");
+					} else if (!urlData.kitsu) {
+						message = message.concat("Kitsu Failure: Title not found\n");
+					} else {
 						// eslint-disable-next-line no-undef
 						const handled = await handleKitsu(tab, urlData.kitsu, {
 							"accessToken": optionsLocal.authentication.kitsu.accessToken,
@@ -151,6 +165,7 @@ browser.contextMenus.removeAll()
 						});
 						message = message.concat(handled.title, ": ", handled.message, "\n");
 					}
+
 					createNotification({ "title": "PTW extending results", "message": message });
 				} else {
 					console.log("Match fail");
