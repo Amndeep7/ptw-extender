@@ -98,11 +98,44 @@ browser.contextMenus.removeAll()
 				return false;
 			};
 
-			const searchForTitle = async (menuId, text) => {
-				if (menuId || text) {
+			const searchForTitle = async (menuId, text, tabId) => {
+				if (!text.trim()) {
 					return false;
 				}
-				return false;
+
+				try {
+					console.log("already injected test");
+					try {
+						await browser.tabs.sendMessage(tabId, {});
+						console.log("was already injected");
+					} catch (ee) {
+						console.log("was not already injected", ee);
+
+						console.log("running polyfill");
+						await browser.tabs.executeScript(tabId, { "file": "./lib/browser-polyfill.js" });
+
+						console.log("running anilist query");
+						await browser.tabs.executeScript(tabId, { "file": "./anilist/query.js" });
+
+						console.log("inserting search css");
+						await browser.tabs.insertCSS(tabId, {
+							"allFrames": true,
+							"cssOrigin": "user",
+							"file": "./search/search.css",
+						});
+
+						console.log("running search");
+						await browser.tabs.executeScript(tabId, { "file": "./search/search.js" });
+					}
+
+					return await browser.tabs.sendMessage(tabId, {
+						"type": menuId === searchAnimeId ? "anime" : "manga",
+						"text": text,
+					});
+				} catch (e) {
+					console.log("searching for title went wrong", e);
+					return false;
+				}
 			};
 
 			const acquireUrlData = async (urlDatum) => {
@@ -154,7 +187,7 @@ browser.contextMenus.removeAll()
 					urlDatum = validateAndMineURL(info.linkUrl);
 				} else {
 					console.log(`Selection text: ${info.selectionText}`);
-					urlDatum = await searchForTitle(info.menuItemId, info.selectionText);
+					urlDatum = await searchForTitle(info.menuItemId, info.selectionText, tab.id);
 				}
 
 				const urlData = await acquireUrlData(urlDatum);
