@@ -16,3 +16,6 @@ lib/
 # "production" artifacts - screenshots and modified icons to fit browser promotion requirements
 pictures/*.png
 pictures/*.gif
+
+# technical presentation
+presentation/
