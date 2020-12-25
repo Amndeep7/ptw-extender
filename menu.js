@@ -117,13 +117,6 @@ browser.contextMenus.removeAll()
 						console.log("running anilist query");
 						await browser.tabs.executeScript(tabId, { "file": "./anilist/query.js" });
 
-						console.log("inserting search css");
-						await browser.tabs.insertCSS(tabId, {
-							"allFrames": true,
-							"cssOrigin": "user",
-							"file": "./search/search.css",
-						});
-
 						console.log("running search");
 						await browser.tabs.executeScript(tabId, { "file": "./search/search.js" });
 					}

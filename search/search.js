@@ -13,46 +13,87 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 		let urlData = false;
 		let userConfirms = false;
 
-		const removeModal = () => {
-			const modal = document.querySelector("#ptw-extender-modal");
-			modal.remove();
+		const removeModal = (modalRoot) => {
+			modalRoot.remove();
 		};
 
 		// create and display base modal
 		const createModal = () => {
+			const host = document.createElement("div");
+			host.setAttribute("id", "ptw-extender-modal-root");
+			host.setAttribute("style", "all: initial");
+			const shadow = host.attachShadow({mode: "open"});
+
 			const surroundingDiv = document.createElement("div");
 			surroundingDiv.setAttribute("id", "ptw-extender-modal");
+			shadow.appendChild(surroundingDiv);
 
-			const surroundingIframe = document.createElement("div");
-			const mybody = document.createElement("body");
-			surroundingIframe.appendChild(mybody);
-			surroundingDiv.appendChild(surroundingIframe);
+			const surroundingDivStyle = document.createElement("style");
+			surroundingDivStyle.textContent = `
+				#ptw-extender-modal {
+					position: fixed;
+					z-index: 9999;
+					left: 0px;
+					top: 0px;
+					width: 100%;
+					height: 100%;
+					background-color: rgba(0, 0, 0, 0.5);
+				}
+			`;
+			surroundingDiv.appendChild(surroundingDivStyle);
 
 			const interiorDiv = document.createElement("div");
 			interiorDiv.setAttribute("id", "ptw-extender-modal-content");
-			mybody.appendChild(interiorDiv);
+			surroundingDiv.appendChild(interiorDiv);
+
+			const interiorDivStyle = document.createElement("style");
+			interiorDivStyle.textContent = `
+				#ptw-extender-modal-content {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					background-color: white;
+				}
+			`;
+			interiorDiv.appendChild(interiorDivStyle);
 
 			const closeButton = document.createElement("div");
 			closeButton.setAttribute("id", "ptw-extender-close-button");
 			closeButton.textContent = "×"; // times symbol not x
-			closeButton.addEventListener("click", removeModal);
+			closeButton.addEventListener("click", () => removeModal(host));
 			closeButton.addEventListener("click", () => { urlData = false; userConfirms = true; });
 			interiorDiv.appendChild(closeButton);
+
+			const closeButtonStyle = document.createElement("style");
+			closeButtonStyle.textContent = `
+				#ptw-extender-close-button {
+					float: right;
+					width: 2rem;
+					line-height: 2rem;
+					text-align: center;
+					cursor: pointer;
+					background-color: lightgray;
+				}
+
+				#ptw-extender-close-button:hover {
+					background-color: darkgrey;
+				}
+			`;
+			closeButton.appendChild(closeButtonStyle);
 
 			const changingDiv = document.createElement("div");
 			changingDiv.setAttribute("id", "ptw-extender-changing");
 			interiorDiv.appendChild(changingDiv);
 
-			const source = document.createElement("p");
-			source.textContent = "Thanks to AniList for having an API";
-			interiorDiv.appendChild(source);
-
 			const body = document.querySelector("body");
-			body.insertAdjacentElement("afterbegin", surroundingDiv);
-		};
-		createModal();
+			body.insertAdjacentElement("afterbegin", host);
 
-		const search = async (type, text) => {
+			return host;
+		};
+		const modal = createModal();
+
+		const search = async (type, text, modalRoot) => {
 			const emptyDiv = (div) => {
 				while (div.firstChild) {
 					div.removeChild(div.firstChild);
@@ -60,7 +101,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 			};
 
 			const displayLoading = () => {
-				const div = document.querySelector("#ptw-extender-changing");
+				const div = modalRoot.shadowRoot.querySelector("#ptw-extender-changing");
 				emptyDiv(div);
 
 				div.appendChild(document.createTextNode("Loading... please wait."));
@@ -133,8 +174,8 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 					searchButton.setAttribute("name", "ptw_extender_search_button");
 					searchButton.setAttribute("value", "Search");
 					searchButton.addEventListener("click", () => {
-						search(document.querySelector("input[name='ptw_extender_search_type']:checked").value,
-							document.querySelector("input[name='ptw_extender_search_name']").value);
+						search(modalRoot.shadowRoot.querySelector("input[name='ptw_extender_search_type']:checked").value,
+							modalRoot.shadowRoot.querySelector("input[name='ptw_extender_search_name']").value);
 					});
 					area.appendChild(searchButton);
 
@@ -144,7 +185,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 				if (errors) {
 					urlData = false;
 					const displayNoResults = () => {
-						const div = document.querySelector("#ptw-extender-changing");
+						const div = modalRoot.shadowRoot.querySelector("#ptw-extender-changing");
 						emptyDiv(div);
 
 						div.appendChild(createSearchArea());
@@ -158,7 +199,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 				} else {
 					urlData = data;
 					const displayTheResult = () => {
-						const div = document.querySelector("#ptw-extender-changing");
+						const div = modalRoot.shadowRoot.querySelector("#ptw-extender-changing");
 						emptyDiv(div);
 
 						div.appendChild(createSearchArea());
@@ -195,7 +236,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 				userConfirms = true;
 			}
 		};
-		search(message.type, message.text);
+		search(message.type, message.text, modal);
 
 		const waitingOnUserConfirmation = () => new Promise((resolve) => {
 			const refreshRate = 50;
@@ -208,7 +249,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 		});
 		await waitingOnUserConfirmation();
 
-		removeModal();
+		removeModal(modal);
 
 		return urlData;
 	}
