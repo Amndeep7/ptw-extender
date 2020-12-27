@@ -45,7 +45,7 @@
       "menu.js"
     ],
     "persistent": false
-  }, 
+  },
 
   "options_ui": {
     "page": "options/options.html",

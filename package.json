@@ -1,6 +1,6 @@
 {
   "name": "ptw-extender",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Extension that adds titles to your MyAnimeList, AniList, or Kitsu plan-to-watch/read list with the url of where you found it added as a comment.",
   "repository": {
     "type": "git",
@@ -8,21 +8,69 @@
   },
   "author": "Amndeep Singh Mann",
   "license": "MIT",
-  "main": "menu.js",
+  "browser": "menu.js",
   "scripts": {
-    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "eslint": "^5.7.0",
-    "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.13.0"
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "prettier": "^2.2.1",
+    "stylelint": "^13.8.0",
+    "stylelint-config-standard": "^20.0.0",
+    "web-ext": "^5.4.1"
   },
   "dependencies": {
-    "deepmerge": "^2.2.1",
-    "dompurify": "^1.0.8",
-    "linkifyjs": "^2.1.6",
-    "showdown": "^1.8.6",
-    "webextension-polyfill": "^0.3.0"
+    "deepmerge": "^4.2.2",
+    "dompurify": "^2.2.6",
+    "linkifyjs": "^2.1.9",
+    "showdown": "^1.9.1",
+    "webextension-polyfill": "^0.7.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "emcaVersion": 2017,
+      "sourceType": "script",
+      "emcaFeatures": {
+        "impliedStrict": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "es2017": true,
+      "webextensions": true
+    },
+    "extends": [
+      "airbnb-base",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "max-len": [
+        "error",
+        120,
+        2,
+        {
+          "ignoreUrls": true,
+          "ignoreComments": false,
+          "ignoreRegExpLiterals": true,
+          "ignoreStrings": true,
+          "ignoreTemplateLiterals": true
+        }
+      ],
+      "no-console": "off"
+    }
+  },
+  "eslintIgnore": [
+    "lib/"
+  ],
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
   }
 }
