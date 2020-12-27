@@ -64,13 +64,13 @@ the end-user.
 
 A detailed explanation for why PTW Extender asks for these permissions.
 
-### [https://myanimelist.net/*](https://myanimelist.net)
+### `https://myanimelist.net/*`
 
 As of the time of writing, MAL doesn't have an API, so in order to access,
 scrape, and modify the add/edit page, PTW Extender need permissions to view it.
 
 <!-- markdownlint-disable-next-line line-length-->
-### [https://anilist.co/*](https://anilist.co) | [https://kitsu.io/*](https://kitsu.io) | [https://myanimelist.net/ownlist/*](https://myanimelist.net/ownlist)
+### `https://anilist.co/*` | `https://kitsu.io/*` | `https://myanimelist.net/ownlist/*`
 
 In order to have the prettified comments box show up,
 PTW Extender needs permission to create and display it on those pages.

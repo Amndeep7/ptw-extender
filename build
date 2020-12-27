@@ -24,6 +24,6 @@ cp node_modules/deepmerge/dist/umd.js lib/
 echo "'Compiling' readme"
 cat readme/readme.md > README.md
 echo >> README.md
-echo "----" >> README.md
+echo "---" >> README.md
 echo >> README.md
-cat readme/permissions_explanation.md >> README.md
+sed 's/^#/&#/' readme/permissions_explanation.md >> README.md
