@@ -1,171 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>PTW Extender Options Page</title>
-	<link rel="stylesheet" href="options.css">
-</head>
-<body>
-	<span id="optionsPage">
-		<div id="header">
-			<h1>PTW Extender</h1>
-			<p>Thanks for using this extension to satisfy your plan-to-watch list extending needs!</p>
-			<p>If you've ever got any questions, comments, or complaints, feel free to create an issue on <a href="https://github.com/Amndeep7/ptw-extender/issues">Github</a> or leave a <a id="review">review</a>.
-		</div>
-		<div id="options">
-			<h2>PTW Extender Options</h2>
-			<form>
-				<fieldset>
-					<legend>Extension generic options</legend>
-					<label>
-						<input type="checkbox" name="extension_displayNotifications">
-						Display notifications to display success/failure of actions by the extension
-					</label>
-					<label>
-						<input type="checkbox" name="extension_prettifyCommentsBox">
-						Add an alternate view for the comments box so it's easy to click links
-					</label>
-				</fieldset>
-				<fieldset>
-					<legend>MAL specific options</legend>
-					<label>
-						<input type="checkbox" name="mal_mal">
-						Use MAL as a list site option
-					</label>
-					<div class="dependent" data-dependent-on="mal_mal" data-dependent-property="checked">
-						<label>
-							<input type="checkbox" name="mal_autosubmit">
-							Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
-						</label>
-						<fieldset class="dependent" data-dependent-on="mal_autosubmit" data-dependent-property="checked">
-							<legend>Action to take after hitting submit</legend>
-							<label>
-								<input type="radio" name="mal_behaviorPostAutosubmit" value="nothing">
-								Do nothing
-							</label>
-							<label>
-								<input type="radio" name="mal_behaviorPostAutosubmit" value="viewList">
-								View your list
-							</label>
-							<label>
-								<input type="radio" name="mal_behaviorPostAutosubmit" value="titlePage">
-								View the title's page
-							</label>
-							<label>
-								<input type="radio" name="mal_behaviorPostAutosubmit" value="closeTab">
-								Close the tab
-							</label>
-						</fieldset>
-						<fieldset>
-							<legend>Show priority</legend>
-							<label>
-								<input type="radio" name="mal_priority" value="low">
-								Low
-							</label>
-							<label>
-								<input type="radio" name="mal_priority" value="medium">
-								Medium
-							</label>
-							<label>
-								<input type="radio" name="mal_priority" value="high">
-								High
-							</label>
-						</fieldset>
-						<div>
-							<label class="flex">
-								Tags
-								<textarea name="mal_tags"></textarea>
-							</label>
-							<p>
-							Similarly to what happens with the comments/notes, these tags will be appended to whatever you have there.
-							</p>
-						</div>
-					</div>
-				</fieldset>
-				<fieldset>
-					<legend>AniList specific options</legend>
-					<label>
-						<input type="checkbox" name="anilist_anilist">
-						Use AniList as a list site option
-					</label>
-					<div class="dependent" data-dependent-on="anilist_anilist" data-dependent-property="checked">
-						<div>
-							<input type="button" name="anilist_login" value="Login to AniList">
-							<p>
-							The access token that is acquired is saved in this extension's local storage and will work for a year after which you'll have to manually log out and log back in here.  Some browsers (ex. Chrome) have an access token cache that <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=328876">PTW Extender can't remove its token from</a> so, in order to log out fully, you'll need to also restart your browser.
-							</p>
-						</div>
-						<div>
-							<label>
-								Select which custom lists you want to put the title in - these will be in addition to whichever custom lists the title might already be in.  The set of selectable custom lists only refreshes on login.
-							</label>
-							<fieldset name="anilist_customListsAnime">
-								<legend>Anime custom lists</legend>
-							</fieldset>
-							<fieldset name="anilist_customListsManga">
-								<legend>Manga custom lists</legend>
-							</fieldset>
-						</div>
-						<div>
-							<p>
-							These options will not override the settings for a title that already has an entry in your list.
-							</p>
-							<label>
-								<input type="checkbox" name="anilist_private">
-								Entries are private, i.e. only visible to you
-							</label>
-							<label>
-								<input type="checkbox" name="anilist_hiddenFromStatusLists">
-								Entries are hidden from your status lists (i.e. your non-custom lists, such as "Watching")
-							</label>
-						</div>
-					</div>
-				</fieldset>
-				<fieldset>
-					<legend>Kitsu specific options</legend>
-					<label>
-						<input type="checkbox" name="kitsu_kitsu">
-						Use Kitsu as a list site option
-					</label>
-					<div class="dependent" data-dependent-on="kitsu_kitsu" data-dependent-property="checked">
-						<div>
-							<label>
-								Username: 
-								<input type="text" name="kitsu_username">
-							</label>
-							<label>
-								Password: 
-								<input type="password" name="kitsu_password">
-							</label>
-							<input type="button" name="kitsu_login" value="Login to Kitsu">
-							<p>
-								The access token that is acquired is saved in this extension's local storage and will work for 30 days after which you'll have to manually log out and log back in here.  PTW Extender does not save your username or password whatsoever.
-							</p>
-						</div>
-						<label>
-							<input type="checkbox" name="kitsu_private">
-							Entries are private, i.e. only visible to you
-						</label>
-					</div>
-				</fieldset>
-			</form>
-			<div class="results_area">
-				<h4>The last action:</h4>
-				<p id="results">Nothing was changed</p>
-			</div>
-		</div>
-	</span>
-	<span id="notOptionsPage">
-		<div id="changelog" class="rightside"></div>
-		<div id="permissionsExplanation" class="rightside"></div>
-	</span>
+  <head>
+    <meta charset="UTF-8" />
+    <title>PTW Extender Options Page</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <span id="optionsPage">
+      <div id="header">
+        <h1>PTW Extender</h1>
+        <p>Thanks for using this extension to satisfy your plan-to-watch list extending needs!</p>
+        <p>
+          If you've ever got any questions, comments, or complaints, feel free to create an issue on
+          <a href="https://github.com/Amndeep7/ptw-extender/issues">Github</a> or leave a <a id="review">review</a>.
+        </p>
+      </div>
 
-	<script type="application/javascript" src="../lib/browser-polyfill.js"></script>
-	<script type="application/javascript" src="../lib/umd.js"></script>
-	<script type="application/javascript" src="../lib/showdown.js"></script>
-	<script type="application/javascript" src="../lib/purify.js"></script>
-	<script type="application/javascript" src="../anilist/query.js"></script>
-	<script type="application/javascript" src="options-defaults.js"></script>
-	<script type="application/javascript" src="options.js"></script>
-</body>
+      <div id="options">
+        <h2>PTW Extender Options</h2>
+        <form>
+          <fieldset>
+            <legend>Extension generic options</legend>
+            <label>
+              <input type="checkbox" name="extension_displayNotifications" />
+              Display notifications to display success/failure of actions by the extension
+            </label>
+            <label>
+              <input type="checkbox" name="extension_prettifyCommentsBox" />
+              Add an alternate view for the comments box so it's easy to click links
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>MAL specific options</legend>
+            <label>
+              <input type="checkbox" name="mal_mal" />
+              Use MAL as a list site option
+            </label>
+            <div class="dependent" data-dependent-on="mal_mal" data-dependent-property="checked">
+              <label>
+                <input type="checkbox" name="mal_autosubmit" />
+                Automatically hit the submit button on the title's details page (i.e. the tab that this extension opens)
+              </label>
+              <fieldset class="dependent" data-dependent-on="mal_autosubmit" data-dependent-property="checked">
+                <legend>Action to take after hitting submit</legend>
+                <label>
+                  <input type="radio" name="mal_behaviorPostAutosubmit" value="nothing" />
+                  Do nothing
+                </label>
+                <label>
+                  <input type="radio" name="mal_behaviorPostAutosubmit" value="viewList" />
+                  View your list
+                </label>
+                <label>
+                  <input type="radio" name="mal_behaviorPostAutosubmit" value="titlePage" />
+                  View the title's page
+                </label>
+                <label>
+                  <input type="radio" name="mal_behaviorPostAutosubmit" value="closeTab" />
+                  Close the tab
+                </label>
+              </fieldset>
+              <fieldset>
+                <legend>Show priority</legend>
+                <label>
+                  <input type="radio" name="mal_priority" value="low" />
+                  Low
+                </label>
+                <label>
+                  <input type="radio" name="mal_priority" value="medium" />
+                  Medium
+                </label>
+                <label>
+                  <input type="radio" name="mal_priority" value="high" />
+                  High
+                </label>
+              </fieldset>
+              <div>
+                <label class="flex">
+                  Tags
+                  <textarea name="mal_tags"></textarea>
+                </label>
+                <p>
+                  Similarly to what happens with the comments/notes, these tags will be appended to whatever you have
+                  there.
+                </p>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>AniList specific options</legend>
+            <label>
+              <input type="checkbox" name="anilist_anilist" />
+              Use AniList as a list site option
+            </label>
+            <div class="dependent" data-dependent-on="anilist_anilist" data-dependent-property="checked">
+              <div>
+                <input type="button" name="anilist_login" value="Login to AniList" />
+                <p>
+                  The access token that is acquired is saved in this extension's local storage and will work for a year
+                  after which you'll have to manually log out and log back in here. Some browsers (ex. Chrome) have an
+                  access token cache that
+                  <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=328876"
+                    >PTW Extender can't remove its token from</a
+                  >
+                  so, in order to log out fully, you'll need to also restart your browser.
+                </p>
+              </div>
+              <div>
+                <label>
+                  Select which custom lists you want to put the title in - these will be in addition to whichever custom
+                  lists the title might already be in. The set of selectable custom lists only refreshes on login.
+                </label>
+                <fieldset name="anilist_customListsAnime">
+                  <legend>Anime custom lists</legend>
+                </fieldset>
+                <fieldset name="anilist_customListsManga">
+                  <legend>Manga custom lists</legend>
+                </fieldset>
+              </div>
+              <div>
+                <p>These options will not override the settings for a title that already has an entry in your list.</p>
+                <label>
+                  <input type="checkbox" name="anilist_private" />
+                  Entries are private, i.e. only visible to you
+                </label>
+                <label>
+                  <input type="checkbox" name="anilist_hiddenFromStatusLists" />
+                  Entries are hidden from your status lists (i.e. your non-custom lists, such as "Watching")
+                </label>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Kitsu specific options</legend>
+            <label>
+              <input type="checkbox" name="kitsu_kitsu" />
+              Use Kitsu as a list site option
+            </label>
+            <div class="dependent" data-dependent-on="kitsu_kitsu" data-dependent-property="checked">
+              <div>
+                <label>
+                  Username:
+                  <input type="text" name="kitsu_username" />
+                </label>
+                <label>
+                  Password:
+                  <input type="password" name="kitsu_password" />
+                </label>
+                <input type="button" name="kitsu_login" value="Login to Kitsu" />
+                <p>
+                  The access token that is acquired is saved in this extension's local storage and will work for 30 days
+                  after which you'll have to manually log out and log back in here. PTW Extender does not save your
+                  username or password whatsoever.
+                </p>
+              </div>
+              <label>
+                <input type="checkbox" name="kitsu_private" />
+                Entries are private, i.e. only visible to you
+              </label>
+            </div>
+          </fieldset>
+        </form>
+        <div class="results_area">
+          <h4>The last action:</h4>
+          <p id="results">Nothing was changed</p>
+        </div>
+      </div>
+    </span>
+    <span id="notOptionsPage">
+      <div id="changelog" class="rightside"></div>
+      <div id="permissionsExplanation" class="rightside"></div>
+    </span>
+
+    <script type="application/javascript" src="../lib/browser-polyfill.js"></script>
+    <script type="application/javascript" src="../lib/umd.js"></script>
+    <script type="application/javascript" src="../lib/showdown.js"></script>
+    <script type="application/javascript" src="../lib/purify.js"></script>
+    <script type="application/javascript" src="../anilist/query.js"></script>
+    <script type="application/javascript" src="options-defaults.js"></script>
+    <script type="application/javascript" src="options.js"></script>
+  </body>
 </html>
