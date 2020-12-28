@@ -1,10 +1,8 @@
 # spam
 .*.un~
 .*.swp
-.tern-project
 node_modules
-package-lock.json
-npm-debug.log 
+npm-debug.log
 
 # firefox addon stuff
 web-ext-artifacts
