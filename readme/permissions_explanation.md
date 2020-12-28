@@ -7,7 +7,6 @@ A detailed explanation for why PTW Extender asks for these permissions.
 As of the time of writing, MAL doesn't have an API, so in order to access,
 scrape, and modify the add/edit page, PTW Extender need permissions to view it.
 
-<!-- markdownlint-disable-next-line line-length-->
 ## `https://anilist.co/*` | `https://kitsu.io/*` | `https://myanimelist.net/ownlist/*`
 
 In order to have the prettified comments box show up,
@@ -16,7 +15,7 @@ PTW Extender needs permission to create and display it on those pages.
 ## activeTab
 
 In order to use the search capabilities, PTW Extender pops up a modal that
-confirms if the title it found was the one you wanted.  In order to create that
+confirms if the title it found was the one you wanted. In order to create that
 modal, it needs permissions for the tab you're currently on, i.e. the active tab.
 
 ## contextMenus
@@ -50,7 +49,7 @@ the comments block of whatever title you're adding to your PTW list.
 
 If you're using MAL and have tweaked the appropriate options, you can first and
 foremost autosubmit the changes PTW Extender makes to that entry, and then also
-tell it to take certain actions post autosubmit.  However, in order to know when
+tell it to take certain actions post autosubmit. However, in order to know when
 the submission process has completed requires knowing when the page has finished
 redirecting to MAL's "you've updated the entry" page, which is where this
 permission comes in.
